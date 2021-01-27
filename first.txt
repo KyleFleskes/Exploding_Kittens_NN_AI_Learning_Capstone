@@ -1,2 +1,2 @@
 Git is awesome. -Kyle Fleskes
-眩しい～ - Andrew Coates
+Git is awesome! - Andrew Coates
