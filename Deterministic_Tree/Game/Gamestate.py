@@ -3,7 +3,10 @@
 # This has been changed and commented to increase readablity while also changing some functions
 # to fit Exploding Kittens rather than Tic Tac Toe.
 from abc import ABC, abstractmethod
-from Exploding_Kittens import Game as game
+try:
+    from Exploding_Kittens import Game as game
+except ImportError:
+    from .Exploding_Kittens import Game as game
 import copy
 
 
@@ -149,14 +152,14 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-        print("is this function working?????")
+        
         gameCopy = copy.deepcopy(self.game)
 
         gameCopy.player[gameCopy.currentPlayer].playTurn(
             self.indexToChoice[action])
         print(self.game.moves)
         print(gameCopy.moves)
-
+        
         return ExplodingKittensAbstractGameState(gameCopy)
 
     # A method that returns the list of all legal actions of the current game state.

@@ -24,16 +24,17 @@ def player1Draw(game):
 
 
 class Game ():
-    drawingPile = []
-    playedCards = []
-    currentPlayer = 0
-    isGameOver = False
-    noOfTurn = 0
-    explosionStatus = False
-    knownCards0 = []
-    knownCards1 = []
-    moves = []
-    player = []
+    def __init__(self):
+        self.drawingPile = []
+        self.playedCards = []
+        self.currentPlayer = 0
+        self.isGameOver = False
+        self.noOfTurn = 0
+        self.explosionStatus = False
+        self.knownCards0 = []
+        self.knownCards1 = []
+        self.moves = []
+        self.player = []
 
     def startGame(self):  # not sure if simply removing the new keyword is ok
         self.player.append(Player(self))
