@@ -1,0 +1,2 @@
+Git is awesome. -Kyle Fleskes
+Git is awesome! - Andrew Coates
