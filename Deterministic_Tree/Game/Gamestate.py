@@ -3,7 +3,7 @@
 # This has been changed and commented to increase readablity while also changing some functions
 # to fit Exploding Kittens rather than Tic Tac Toe.
 from abc import ABC, abstractmethod
-from Exploding_Kittens import Game as game
+from .Exploding_Kittens import Game as game
 
 
 # This is an abstract class for a given two player game.

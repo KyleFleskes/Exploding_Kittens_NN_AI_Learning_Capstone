@@ -5,9 +5,9 @@
 import numpy as np
 import random
 
-from MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
-from MonteCarloTreeSearch import MonteCarloTreeSearch as tree
-from Gamestate import ExplodingKittensAbstractGameState as gs
+from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
+from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
+from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 #from TicTacToe import TicTacToeGameState
 
 # Does a pretty print of the search tree.
@@ -100,7 +100,3 @@ while (not board_state.is_game_over()):
 
 winner = board_state.game_result()
 print("Player: ", winner, " is the winner!")
-
-# print(root.state.get_obsersavtion_space())
-#mcts = tree(root)
-#best_node = mcts.best_action(1)
