@@ -86,11 +86,16 @@ print("Player: ", winner, " is the winner!")
 
 board_state = gs() # create the initial game baord state.
 root = node(board_state) # put that board state into a node.
-print(root.untried_actions)
-print(root.q)
-print(root.n)
-root.expand()
-
+#print(root.untried_actions)
+#print(root.q)
+#print(root.n)
+while (not root.is_fully_expanded()):
+    print(root.state.get_obsersavtion_space())
+    print(root.untried_actions)
+    root.expand()
+    
+    
+#print(root.children)
 '''
 board_state = gs() # create the initial game baord state.
 root = node(board_state) # put that board state into a node.
