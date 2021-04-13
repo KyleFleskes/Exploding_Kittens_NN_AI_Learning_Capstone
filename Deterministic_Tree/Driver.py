@@ -90,8 +90,8 @@ root = node(board_state) # put that board state into a node.
 #print(root.q)
 #print(root.n)
 while (not root.is_fully_expanded()):
-    print(root.state.get_obsersavtion_space())
-    print(root.untried_actions)
+    #print(root.state.get_obsersavtion_space())
+    #print(root.untried_actions)
     root.expand()
     
     
