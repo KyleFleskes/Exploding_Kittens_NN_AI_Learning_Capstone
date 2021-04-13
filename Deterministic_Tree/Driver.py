@@ -35,23 +35,7 @@ def typeToIndex(indexToChoice, Type):
 
     return index
 
-
-# This is the driver code to get TicTacToe,
-# note somechanges need to be made in MonteCarloTreeSearchNode to make this work.
-'''
-state = np.zeros((3,3))
-
-initial_board_state = TicTacToeGameState(state = state, next_to_move=1)
-#print(initial_board_state.board)
-root = node(state = initial_board_state)
-mcts = tree(root)
-best_node = mcts.best_action(2)
-
-#print(best_node.state.board)
-pprint_tree(root)
-'''
-
-# This is some testing code to make sure the that
+# This is some testing code to make sure that
 # get_obsersavtion_space(), get_legal_actions(), and move() works as intended in Gamestate.py
 '''
 board_state = gs()
@@ -76,7 +60,9 @@ print(choice)
 index = typeToIndex(board_state.indexToChoice, choice)
 print(index)
 '''
-
+# This is some test code to make sure that
+# is_game_over(), and game_result() works as intended.
+'''
 board_state = gs()
 print(board_state.is_game_over())
 while (not board_state.is_game_over()):
@@ -85,12 +71,8 @@ while (not board_state.is_game_over()):
     legal_actions = board_state.get_legal_actions()
     print(legal_actions)
     # if there are no vaild cards to play in your hand, draw a card and end your turn.
-    if legal_actions is None:
-        print("no legal actions, drawing a card and ending turn.")
-        choice = 13
-    # if there are cards to play in your hand, pick one legal action at random.
-    else:
-        choice = random.choice(legal_actions)  # pick a legal action at random.
+    
+    choice = random.choice(legal_actions)  # pick a legal action at random.
     print(choice)
     # turn that legal action into an index of the observation space.
     index = typeToIndex(board_state.indexToChoice, choice)
@@ -100,3 +82,19 @@ while (not board_state.is_game_over()):
 
 winner = board_state.game_result()
 print("Player: ", winner, " is the winner!")
+'''
+
+board_state = gs() # create the initial game baord state.
+root = node(board_state) # put that board state into a node.
+print(root.untried_actions)
+print(root.q)
+print(root.n)
+root.expand()
+
+'''
+board_state = gs() # create the initial game baord state.
+root = node(board_state) # put that board state into a node.
+tree = tree(root) # put that node at the root of the tree.
+
+tree.best_action(1)
+'''

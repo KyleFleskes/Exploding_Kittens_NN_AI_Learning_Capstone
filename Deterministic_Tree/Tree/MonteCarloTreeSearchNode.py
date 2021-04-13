@@ -104,23 +104,38 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     @property
     def q(self):
         # changed to use game.currentplayer
-        wins = self._results[self.parent.state.game.currentPlayer]
-        loses = self._results[abs(self.parent.state.next_to_move - 1)]
-        #wins = self._results[self.parent.state.next_to_move]
-        #loses = self._results[-1 * self.parent.state.next_to_move]
+        if self.parent is not None:
+            wins = self._results[self.parent.state.game.currentPlayer]
+            loses = self._results[abs(self.parent.state.next_to_move - 1)]
+            #wins = self._results[self.parent.state.next_to_move]
+            #loses = self._results[-1 * self.parent.state.next_to_move]
+        else:
+            wins = 0
+            loses = 0
         return wins - loses
 
     @property
     def n(self):
         return self._number_of_visits
 
+    def typeToIndex(self, indexToChoice, Type):
+        index = None
+
+        for key, value in indexToChoice.items():
+            # if the value is in the dictionary
+            if Type == value:
+                index = key
+
+        return index
+
     # picks an untried action for the current node and simulates it,
     # then adds the state to the tree. Returns the newly created node.
     def expand(self):
         # pick an untried action
         action = self.untried_actions.pop()
+        index = self.typeToIndex(self.state.indexToChoice, action)
         # simulate the action
-        next_state = self.state.move(action)
+        next_state = self.state.move(index)
         # add the new games state to the tree as a child of the current node.
         child_node = TwoPlayersGameMonteCarloTreeSearchNode(
             next_state, parent=self
