@@ -107,16 +107,7 @@ root.children[0].rollout()
 board_state = gs()
 root = node(board_state)
 t = tree(root)
-action = t.best_action(100)
-#best_node.state.game # This is the copy of gamestate that the AI wants to move to.
-#print(root.children)
+action = t.best_action(50)
 
 pprint_tree(root)
 print("Best next move: ", action)
-'''
-board_state = gs() # create the initial game baord state.
-root = node(board_state) # put that board state into a node.
-tree = tree(root) # put that node at the root of the tree.
-
-tree.best_action(1)
-'''
