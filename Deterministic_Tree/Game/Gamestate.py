@@ -123,9 +123,9 @@ class ExplodingKittensAbstractGameState(ABC):
         """
         if self.game.isGameOver:
             if self.game.currentPlayer == 0:  # sim uses 0 for p1 and 1 for p2
-                return 1
+                return 0
             else:
-                return -1
+                return 1
         else:
             return None
 

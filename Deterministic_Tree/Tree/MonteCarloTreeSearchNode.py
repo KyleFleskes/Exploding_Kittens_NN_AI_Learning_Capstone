@@ -23,6 +23,8 @@ class MonteCarloTreeSearchNode(ABC):
         self.state = state
         self.parent = parent
         self.children = []
+        self.wins = 0
+        self.loses = 0
 
     # An abstract method that will give the list of untried actions.
     @property
@@ -80,8 +82,12 @@ class MonteCarloTreeSearchNode(ABC):
             (c.q / c.n) + c_param * np.sqrt((2 * np.log(self.n) / c.n))
             for c in self.children
         ]
+        print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
 
+    #def q_value(self, c_param=1.4):
+    #    return (self.q / self.n) + c_param * np.sqrt((2 * np.log(self.n) / self.n))
+    
     # picks a random action from the list of legal available actions.
     def rollout_policy(self, possible_moves):
         return possible_moves[np.random.randint(len(possible_moves))]
@@ -105,19 +111,19 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     def q(self):
         # changed to use game.currentplayer
         if self.parent is not None:
-            wins = self._results[self.parent.state.game.currentPlayer]
-            loses = self._results[abs(self.parent.state.game.currentPlayer - 1)]
+            
+            self.wins = self._results[self.parent.state.game.currentPlayer]
+            self.loses = self._results[abs(self.parent.state.game.currentPlayer - 1)]
+            
             #wins = self._results[self.parent.state.next_to_move]
             #loses = self._results[-1 * self.parent.state.next_to_move]
-        else:
-            wins = 0
-            loses = 0
-        return wins - loses
+        return self.wins - self.loses
 
     @property
     def n(self):
         return self._number_of_visits
 
+    # turns a card type name into the card's index in the observation space.
     def typeToIndex(self, indexToChoice, Type):
         index = None
 
@@ -160,11 +166,14 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             index = self.typeToIndex(self.state.indexToChoice, action)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(index)
-        return current_rollout_state.game_result
+        #print("Game result: ", current_rollout_state.game_result())
+        return current_rollout_state.game_result()
 
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
+        #print("Game result: ", current_rollout_state.game_result())
+        print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1.
         # keep track of if the nodes children resulted in a win or a loss.
         self._results[result] += 1.

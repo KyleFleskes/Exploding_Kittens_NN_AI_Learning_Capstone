@@ -14,8 +14,8 @@ from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 
 
 def pprint_tree(node, file=None, _prefix="", _last=True):
-    print(_prefix, "`- " if _last else "|- ",
-          node.state.board, sep="", file=file)
+    print(_prefix, "`- " if _last else "|- ", "P:",node.state.game.currentPlayer, " ",
+          node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", node._results[0], " #'s loses: ", node._results[1], sep="", file=file)
     _prefix += "   " if _last else "|  "
     child_count = len(node.children)
     for i, child in enumerate(node.children):
@@ -106,10 +106,12 @@ root.children[0].rollout()
    
 board_state = gs()
 root = node(board_state)
-tree = tree(root)
-best_node = tree.best_action(100)
-best_node.state.game # This is the copy of gamestate that the AI wants to move to.
+t = tree(root)
+best_node = t.best_action(20)
+#best_node.state.game # This is the copy of gamestate that the AI wants to move to.
 #print(root.children)
+
+pprint_tree(root)
 print(best_node.state.get_obsersavtion_space())
 '''
 board_state = gs() # create the initial game baord state.

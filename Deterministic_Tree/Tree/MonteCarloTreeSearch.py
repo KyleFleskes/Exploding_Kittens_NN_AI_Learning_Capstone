@@ -32,7 +32,9 @@ class MonteCarloTreeSearch(object):
             v = self._tree_policy()
             # simulate the game until a win or a loss.
             reward = v.rollout()
+            print("Reward: ", reward)
             # update the tree with the simulated game result.
+            print("Backpropagating....")
             v.backpropagate(reward)
         # to select best child with no exploitation.
         return self.root.best_child(c_param=0.)
