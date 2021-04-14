@@ -83,19 +83,34 @@ while (not board_state.is_game_over()):
 winner = board_state.game_result()
 print("Player: ", winner, " is the winner!")
 '''
-
+'''
 board_state = gs() # create the initial game baord state.
 root = node(board_state) # put that board state into a node.
-#print(root.untried_actions)
+print(root.state.get_obsersavtion_space())
+print(root.untried_actions)
 #print(root.q)
 #print(root.n)
+
 while (not root.is_fully_expanded()):
     #print(root.state.get_obsersavtion_space())
     #print(root.untried_actions)
     root.expand()
-    
-    
+
+print(len(root.children))
+
+for x in range(len(root.children)):
+    print(root.children[x].state.get_obsersavtion_space())
+
+root.children[0].rollout()
+'''
+   
+board_state = gs()
+root = node(board_state)
+tree = tree(root)
+best_node = tree.best_action(1)
+best_node.game # This is the copy of gamestate that the AI wants to move to.
 #print(root.children)
+
 '''
 board_state = gs() # create the initial game baord state.
 root = node(board_state) # put that board state into a node.

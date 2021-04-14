@@ -106,7 +106,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
         # changed to use game.currentplayer
         if self.parent is not None:
             wins = self._results[self.parent.state.game.currentPlayer]
-            loses = self._results[abs(self.parent.state.next_to_move - 1)]
+            loses = self._results[abs(self.parent.state.game.next_to_move - 1)]
             #wins = self._results[self.parent.state.next_to_move]
             #loses = self._results[-1 * self.parent.state.next_to_move]
         else:
@@ -157,8 +157,9 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
             action = self.rollout_policy(possible_moves)
+            index = self.typeToIndex(self.state.indexToChoice, action)
             # take the action, and make the new game state the current one.
-            current_rollout_state = current_rollout_state.move(action)
+            current_rollout_state = current_rollout_state.move(index)
         return current_rollout_state.game_result
 
     # this method takes in if a simulated game result

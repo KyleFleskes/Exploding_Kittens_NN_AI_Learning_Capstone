@@ -157,8 +157,8 @@ class ExplodingKittensAbstractGameState(ABC):
 
         gameCopy.player[gameCopy.currentPlayer].playTurn(
             self.indexToChoice[action])
-        print(self.game.moves)
-        print(gameCopy.moves)
+        #print(self.game.moves)
+        #print(gameCopy.moves)
         
         return ExplodingKittensAbstractGameState(gameCopy)
 
@@ -198,7 +198,7 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    print(value)
+                    #print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]
