@@ -106,7 +106,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
         # changed to use game.currentplayer
         if self.parent is not None:
             wins = self._results[self.parent.state.game.currentPlayer]
-            loses = self._results[abs(self.parent.state.game.next_to_move - 1)]
+            loses = self._results[abs(self.parent.state.game.currentPlayer - 1)]
             #wins = self._results[self.parent.state.next_to_move]
             #loses = self._results[-1 * self.parent.state.next_to_move]
         else:
