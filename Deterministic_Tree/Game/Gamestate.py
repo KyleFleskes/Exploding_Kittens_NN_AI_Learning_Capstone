@@ -111,7 +111,7 @@ class ExplodingKittensAbstractGameState(ABC):
         }
 
     # A method that determines which if any player has won or lost.
-    def game_result(self):
+    def game_result(self, owner):
         """
         this property should return:
          1 if player #0 wins
@@ -122,10 +122,10 @@ class ExplodingKittensAbstractGameState(ABC):
         int
         """
         if self.game.isGameOver:
-            if self.game.currentPlayer == 0:  # sim uses 0 for p1 and 1 for p2
-                return 0
+            if self.game.currentPlayer == owner:  # sim uses 0 for p1 and 1 for p2
+                return 0 # win for starting player
             else:
-                return 1
+                return 1 # win for oppenent player
         else:
             return None
 

@@ -13,6 +13,8 @@ class MonteCarloTreeSearch(object):
         node : mctspy.tree.nodes.MonteCarloTreeSearchNode
         """
         self.root = node
+        # This is saved so wins and loses are tracked relative to the tree owner.
+        self.owner = self.root.state.game.currentPlayer  
 
     # Explores the gamespace using MCTS where the number of games is specified by the parameter.
     # Returns what the tree thinks is the "best" next action based upon the tree exploration.
@@ -31,10 +33,10 @@ class MonteCarloTreeSearch(object):
             # get the node that the MCTS wants to explore.
             v = self._tree_policy()
             # simulate the game until a win or a loss.
-            reward = v.rollout()
-            print("Reward: ", reward)
+            reward = v.rollout(self.owner)
+            #print("Reward: ", reward)
             # update the tree with the simulated game result.
-            print("Backpropagating....")
+            #print("Backpropagating....")
             v.backpropagate(reward)
         # to select best child with no exploitation.
         return self.root.best_child(c_param=0.)

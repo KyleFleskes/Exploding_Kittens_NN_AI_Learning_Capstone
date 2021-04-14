@@ -82,7 +82,7 @@ class MonteCarloTreeSearchNode(ABC):
             (c.q / c.n) + c_param * np.sqrt((2 * np.log(self.n) / c.n))
             for c in self.children
         ]
-        print(np.argmax(choices_weights))
+        #print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
 
     #def q_value(self, c_param=1.4):
@@ -155,7 +155,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     # this takes in the current game state and simuates the game with
     # random action until a win or loss.
-    def rollout(self):
+    def rollout(self, owner):
         current_rollout_state = self.state
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
@@ -167,13 +167,13 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(index)
         #print("Game result: ", current_rollout_state.game_result())
-        return current_rollout_state.game_result()
+        return current_rollout_state.game_result(owner)
 
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
         #print("Game result: ", current_rollout_state.game_result())
-        print(self.state.get_obsersavtion_space())
+        #print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1.
         # keep track of if the nodes children resulted in a win or a loss.
         self._results[result] += 1.
