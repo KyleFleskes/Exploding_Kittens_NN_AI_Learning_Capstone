@@ -23,8 +23,7 @@ class MonteCarloTreeSearchNode(ABC):
         self.state = state
         self.parent = parent
         self.children = []
-        self.wins = 0
-        self.loses = 0
+        
 
     # An abstract method that will give the list of untried actions.
     @property
@@ -95,11 +94,14 @@ class MonteCarloTreeSearchNode(ABC):
 # This class represents an individual node in the Monte Carlo Search Tree.
 class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
-    def __init__(self, state, parent=None):
+    def __init__(self, state, parent=None, action=None):
         super().__init__(state, parent)
         self._number_of_visits = 0.
         self._results = defaultdict(int)
         self._untried_actions = None
+        self.wins = 0
+        self.loses = 0
+        self.action = action
 
     @property
     def untried_actions(self):
@@ -143,9 +145,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
         # simulate the action
         next_state = self.state.move(index)
         # add the new games state to the tree as a child of the current node.
-        child_node = TwoPlayersGameMonteCarloTreeSearchNode(
-            next_state, parent=self
-        )
+        child_node = TwoPlayersGameMonteCarloTreeSearchNode(next_state, parent=self, action=action)
         self.children.append(child_node)
         return child_node
 

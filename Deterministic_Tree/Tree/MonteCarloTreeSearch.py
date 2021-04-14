@@ -39,7 +39,7 @@ class MonteCarloTreeSearch(object):
             #print("Backpropagating....")
             v.backpropagate(reward)
         # to select best child with no exploitation.
-        return self.root.best_child(c_param=0.)
+        return self.root.best_child(c_param=0.).action
 
     # Starts at the root of the tree and finds the first unexplored action of the most 
     # profitable nodes in the tree.  
