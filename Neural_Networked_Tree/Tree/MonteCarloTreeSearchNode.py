@@ -125,25 +125,13 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     def n(self):
         return self._number_of_visits
 
-    # turns a card type name into the card's index in the observation space.
-    def typeToIndex(self, indexToChoice, Type):
-        index = None
-
-        for key, value in indexToChoice.items():
-            # if the value is in the dictionary
-            if Type == value:
-                index = key
-
-        return index
-
     # picks an untried action for the current node and simulates it,
     # then adds the state to the tree. Returns the newly created node.
     def expand(self):
         # pick an untried action
         action = self.untried_actions.pop()
-        index = self.typeToIndex(self.state.indexToChoice, action)
         # simulate the action
-        next_state = self.state.move(index)
+        next_state = self.state.move(action)
         # add the new games state to the tree as a child of the current node.
         child_node = TwoPlayersGameMonteCarloTreeSearchNode(next_state, parent=self, action=action)
         self.children.append(child_node)
@@ -163,9 +151,8 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
             action = self.rollout_policy(possible_moves)
-            index = self.typeToIndex(self.state.indexToChoice, action)
             # take the action, and make the new game state the current one.
-            current_rollout_state = current_rollout_state.move(index)
+            current_rollout_state = current_rollout_state.move(action)
         #print("Game result: ", current_rollout_state.game_result())
         return current_rollout_state.game_result(owner)
 
