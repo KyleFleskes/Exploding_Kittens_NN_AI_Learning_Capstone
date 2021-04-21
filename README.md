@@ -11,7 +11,7 @@ Basic python implementation of [Monte Carlo Tree Search](https://int8.io/monte-c
 2. Import the chosen folder into your python IDE of your choice.
 3. Use or create a driver file in either /.../Vanilia_Tree/ or /.../NN_Tree/ and use the example code below to have the AI decide it's next action based off the gamestate.
 
-### Running tic-tac-toe example 
+### Running Exploding Kitten example 
 
 to run tic-tac-toe example:
 
