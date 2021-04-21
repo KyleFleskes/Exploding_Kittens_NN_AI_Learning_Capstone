@@ -155,8 +155,13 @@ class ExplodingKittensAbstractGameState(ABC):
         
         gameCopy = copy.deepcopy(self.game)
 
-        gameCopy.player[gameCopy.currentPlayer].playTurn(
-            self.indexToChoice[action])
+        if isinstance(action, str):
+            gameCopy.player[gameCopy.currentPlayer].playTurn(action)
+        elif isinstance(action, int):
+            gameCopy.player[gameCopy.currentPlayer].playTurn(
+                self.indexToChoice[action])
+        else:
+            print("Invalid argument in gamestate.move")
         #print(self.game.moves)
         #print(gameCopy.moves)
         
