@@ -16,6 +16,12 @@ Basic python implementation of [Monte Carlo Tree Search](https://int8.io/monte-c
 to run tic-tac-toe example:
 
 ```python
+import numpy as np
+
+
+from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
+from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
+from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 
 board_state = gs()
 root = node(board_state)
