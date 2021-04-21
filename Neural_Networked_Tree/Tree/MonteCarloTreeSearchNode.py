@@ -23,6 +23,7 @@ class MonteCarloTreeSearchNode(ABC):
         self.state = state
         self.parent = parent
         self.children = []
+        
 
     # An abstract method that will give the list of untried actions.
     @property
@@ -80,8 +81,12 @@ class MonteCarloTreeSearchNode(ABC):
             (c.q / c.n) + c_param * np.sqrt((2 * np.log(self.n) / c.n))
             for c in self.children
         ]
+        #print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
 
+    #def q_value(self, c_param=1.4):
+    #    return (self.q / self.n) + c_param * np.sqrt((2 * np.log(self.n) / self.n))
+    
     # picks a random action from the list of legal available actions.
     def rollout_policy(self, possible_moves):
         return possible_moves[np.random.randint(len(possible_moves))]
@@ -89,11 +94,14 @@ class MonteCarloTreeSearchNode(ABC):
 # This class represents an individual node in the Monte Carlo Search Tree.
 class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
-    def __init__(self, state, parent=None):
+    def __init__(self, state, parent=None, action=None):
         super().__init__(state, parent)
         self._number_of_visits = 0.
         self._results = defaultdict(int)
         self._untried_actions = None
+        self.wins = 0
+        self.loses = 0
+        self.action = action
 
     @property
     def untried_actions(self):
@@ -104,27 +112,40 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     @property
     def q(self):
         # changed to use game.currentplayer
-        wins = self._results[self.parent.state.game.currentPlayer]
-        loses = self._results[abs(self.parent.state.next_to_move - 1)]
-        #wins = self._results[self.parent.state.next_to_move]
-        #loses = self._results[-1 * self.parent.state.next_to_move]
-        return wins - loses
+        if self.parent is not None:
+            
+            self.wins = self._results[self.parent.state.game.currentPlayer]
+            self.loses = self._results[abs(self.parent.state.game.currentPlayer - 1)]
+            
+            #wins = self._results[self.parent.state.next_to_move]
+            #loses = self._results[-1 * self.parent.state.next_to_move]
+        return self.wins - self.loses
 
     @property
     def n(self):
         return self._number_of_visits
+
+    # turns a card type name into the card's index in the observation space.
+    def typeToIndex(self, indexToChoice, Type):
+        index = None
+
+        for key, value in indexToChoice.items():
+            # if the value is in the dictionary
+            if Type == value:
+                index = key
+
+        return index
 
     # picks an untried action for the current node and simulates it,
     # then adds the state to the tree. Returns the newly created node.
     def expand(self):
         # pick an untried action
         action = self.untried_actions.pop()
+        index = self.typeToIndex(self.state.indexToChoice, action)
         # simulate the action
-        next_state = self.state.move(action)
+        next_state = self.state.move(index)
         # add the new games state to the tree as a child of the current node.
-        child_node = TwoPlayersGameMonteCarloTreeSearchNode(
-            next_state, parent=self
-        )
+        child_node = TwoPlayersGameMonteCarloTreeSearchNode(next_state, parent=self, action=action)
         self.children.append(child_node)
         return child_node
 
@@ -134,7 +155,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     # this takes in the current game state and simuates the game with
     # random action until a win or loss.
-    def rollout(self):
+    def rollout(self, owner):
         current_rollout_state = self.state
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
@@ -142,13 +163,17 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
             action = self.rollout_policy(possible_moves)
+            index = self.typeToIndex(self.state.indexToChoice, action)
             # take the action, and make the new game state the current one.
-            current_rollout_state = current_rollout_state.move(action)
-        return current_rollout_state.game_result
+            current_rollout_state = current_rollout_state.move(index)
+        #print("Game result: ", current_rollout_state.game_result())
+        return current_rollout_state.game_result(owner)
 
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
+        #print("Game result: ", current_rollout_state.game_result())
+        #print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1.
         # keep track of if the nodes children resulted in a win or a loss.
         self._results[result] += 1.

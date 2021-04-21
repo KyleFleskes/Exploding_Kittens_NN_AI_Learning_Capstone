@@ -3,7 +3,11 @@
 # This has been changed and commented to increase readablity while also changing some functions
 # to fit Exploding Kittens rather than Tic Tac Toe.
 from abc import ABC, abstractmethod
-from .Exploding_Kittens import Game as game
+try:
+    from Exploding_Kittens import Game as game
+except ImportError:
+    from .Exploding_Kittens import Game as game
+import copy
 
 
 # This is an abstract class for a given two player game.
@@ -107,7 +111,7 @@ class ExplodingKittensAbstractGameState(ABC):
         }
 
     # A method that determines which if any player has won or lost.
-    def game_result(self):
+    def game_result(self, owner):
         """
         this property should return:
          1 if player #0 wins
@@ -118,10 +122,10 @@ class ExplodingKittensAbstractGameState(ABC):
         int
         """
         if self.game.isGameOver:
-            if self.game.currentPlayer == 0:  # sim uses 0 for p1 and 1 for p2
-                return 1
+            if self.game.currentPlayer == owner:  # sim uses 0 for p1 and 1 for p2
+                return 1 # win for opponent player
             else:
-                return -1
+                return 0 # win for desired player
         else:
             return None
 
@@ -148,10 +152,15 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-        self.game.player[self.game.currentPlayer].playTurn(
-            self.indexToChoice[action])
+        
+        gameCopy = copy.deepcopy(self.game)
 
-        return ExplodingKittensAbstractGameState(self.game)
+        gameCopy.player[gameCopy.currentPlayer].playTurn(
+            self.indexToChoice[action])
+        #print(self.game.moves)
+        #print(gameCopy.moves)
+        
+        return ExplodingKittensAbstractGameState(gameCopy)
 
     # A method that returns the list of all legal actions of the current game state.
     def get_legal_actions(self):
@@ -189,7 +198,7 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    print(value)
+                    #print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]
