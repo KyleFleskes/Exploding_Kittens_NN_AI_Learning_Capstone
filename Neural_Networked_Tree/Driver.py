@@ -2,8 +2,6 @@
 # at https://github.com/int8/monte-carlo-tree-search
 # This has been changed and commented to increase readablity while also changing some functions
 # to fit Exploding Kittens rather than Tic Tac Toe.
-import numpy as np
-
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
@@ -24,7 +22,7 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
 board_state = gs()
 root = node(board_state)
 t = tree(root)
-action = t.best_action(1000)
+action = t.best_action(10)
 
 pprint_tree(root)
 print("Best next move: ", action)

@@ -2,6 +2,22 @@
 # at https://github.com/int8/monte-carlo-tree-search
 # This has been changed and commented to increase readablity while also changing some functions
 # to fit Exploding Kittens rather than Tic Tac Toe.
+import numpy as np
+import tensorflow as tf
+config = tf.compat.v1.ConfigProto(gpu_options = 
+                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
+# device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)
+import numpy as np
+import os.path
+from tensorflow.keras.models import load_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Activation, Dense
+from tensorflow.keras.optimizers import Adam
+
 class MonteCarloTreeSearch(object):
 
     # Creates a tree with the passed node as the root.
@@ -14,7 +30,38 @@ class MonteCarloTreeSearch(object):
         """
         self.root = node
         # This is saved so wins and loses are tracked relative to the tree owner.
-        self.owner = self.root.state.game.currentPlayer  
+        self.owner = self.root.state.game.currentPlayer
+        
+         # if a neural network does not exist then create one.
+        if os.path.isfile('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5') is False:
+            print("!!!Creating new model!!!")
+            self.model = self.create_model()
+        
+        # load previously created model.
+        else:
+            self.model = tf.keras.models.load_model('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+            print("!!!!Loading model from file!!!!")
+
+    # creates a new model with an input layer with 12 nodes, 2 hiddens layers each with size 11 and 10 respectively
+    # and 1 output layers each with size 10.
+    def create_model(self):
+        model = Sequential([
+        Dense(units = 11, input_shape = (12,), activation = 'relu'), # creates first hidden layer(Second overall layer),
+                                                                    # with 16 nodes,
+                                                                    # with an input layer of shape (1,).
+        Dense(units = 10, activation = 'relu'),
+        Dense(units = 9, activation = 'softmax')                    #create an output layer with two output nodes.
+        ])
+        model.compile(optimizer = Adam(learning_rate = 0.0001), 
+            loss = 'sparse_categorical_crossentropy', 
+            metrics = ['accuracy'])
+
+        return model
+
+    #saves the current state of the model.
+    def save_model(self):
+        self.model.save('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+        print("!!!Model saved!!!")
 
     # Explores the gamespace using MCTS where the number of games is specified by the parameter.
     # Returns what the tree thinks is the "best" next action based upon the tree exploration.
