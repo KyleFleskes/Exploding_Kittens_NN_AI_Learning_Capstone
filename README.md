@@ -1,7 +1,7 @@
 ## Reinforcement_Learning_Capstone : python implementation of Monte Carlo Tree Search algorithm for Exploding Kittens.
 
  
-Basic python implementation of [Monte Carlo Tree Search](https://int8.io/monte-carlo-tree-search-beginners-guide) (MCTS) intended to run on small game trees. 
+Basic python implementation of [Monte Carlo Tree Search](https://int8.io/monte-carlo-tree-search-beginners-guide) (MCTS) intended to run the card game Exploding Kittens. 
  
 
 ### Installation
@@ -13,7 +13,7 @@ Basic python implementation of [Monte Carlo Tree Search](https://int8.io/monte-c
 
 ### Running Exploding Kitten example 
 
-to run tic-tac-toe example:
+to run Exploding Kittens example:
 
 ```python
 import numpy as np
