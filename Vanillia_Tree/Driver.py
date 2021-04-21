@@ -107,7 +107,7 @@ root.children[0].rollout()
 board_state = gs()
 root = node(board_state)
 t = tree(root)
-action = t.best_action(50)
+action = t.best_action(100)
 
 pprint_tree(root)
 print("Best next move: ", action)
