@@ -20,7 +20,7 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
 
 
 
-
+'''
 board_state = gs()
 root = node(board_state)
 t = tree(root)
@@ -28,8 +28,8 @@ action = t.best_action(1000)
 
 pprint_tree(root)
 print("Best next move: ", action)
-
 '''
+
 board_state = gs()
 
 while not board_state.is_game_over():
@@ -37,4 +37,3 @@ while not board_state.is_game_over():
     t = tree(root)
     action = t.best_action(50)
     board_state = board_state.move(action)
-'''

@@ -83,9 +83,6 @@ class MonteCarloTreeSearchNode(ABC):
         ]
         #print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
-
-    #def q_value(self, c_param=1.4):
-    #    return (self.q / self.n) + c_param * np.sqrt((2 * np.log(self.n) / self.n))
     
     # picks a random action from the list of legal available actions.
     def rollout_policy(self, possible_moves):
@@ -125,9 +122,6 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     def n(self):
         return self._number_of_visits
 
-    # !!!!!!!!!! This is what I want to change. !!!!!!!!!!!!!!!!!!!
-    # instead of picking an untired action it should look at NN(giving it the current obsersavtion space)
-    # and picking the highest profitable action that is legal and untried.
     # picks an untried action for the current node and simulates it,
     # then adds the state to the tree. Returns the newly created node.
     def expand(self):
