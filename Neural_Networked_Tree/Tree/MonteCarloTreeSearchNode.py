@@ -96,7 +96,13 @@ class MonteCarloTreeSearchNode(ABC):
         state = np.array(self.state.get_obsersavtion_space())
         state = state.reshape(-1,15)
 
+        # use NN to make predictions of win rates for avalible moves.
         predictions = model.predict(state)
+
+        #print(predictions)
+
+        # TO DO: Pick move that has the highest predicted win rate 
+        
 
         return possible_moves[np.random.randint(len(possible_moves))]
 
@@ -163,7 +169,6 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             action = self.rollout_policy(possible_moves, model)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
-            current_player = current_rollout_state.game.currentPlayer
         #print("Game result: ", current_rollout_state.game_result())
 
         return current_rollout_state.game_result()

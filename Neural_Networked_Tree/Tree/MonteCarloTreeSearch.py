@@ -35,6 +35,7 @@ class MonteCarloTreeSearch(object):
         if os.path.isfile(fpath) is False:
             print("!!!Creating new model!!!")
             self.model = self.create_model()
+            self.save_model()
         
         # load previously created model.
         else:
@@ -49,13 +50,18 @@ class MonteCarloTreeSearch(object):
                                                                     # with 16 nodes,
                                                                     # with an input layer of shape (1,).
         Dense(units = 10, activation = 'relu'),
-        Dense(units = 9, activation = 'softmax')                    #create an output layer with two output nodes.
+        Dense(units = 13, activation = 'sigmoid')                    #create an output layer with two output nodes.
         ])
         model.compile(optimizer = Adam(learning_rate = 0.0001), 
             loss = 'sparse_categorical_crossentropy', 
             metrics = ['accuracy'])
 
         return model
+
+    #saves the current state of the model.
+    def save_model(self):
+        self.model.save('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+        print("!!!Model saved!!!")
 
     #saves the current state of the model.
     def save_model(self):
