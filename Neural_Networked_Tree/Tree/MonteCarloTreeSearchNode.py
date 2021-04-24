@@ -176,7 +176,6 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
-        #print("Game result: ", current_rollout_state.game_result())
         #print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1
         

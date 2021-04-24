@@ -150,7 +150,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             action = self.rollout_policy(possible_moves)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
-        print("Game result: ", current_rollout_state.game_result(owner))
+        #print("Game result: ", current_rollout_state.game_result(owner))
         return current_rollout_state.game_result(owner)
 
     # this method takes in if a simulated game result
