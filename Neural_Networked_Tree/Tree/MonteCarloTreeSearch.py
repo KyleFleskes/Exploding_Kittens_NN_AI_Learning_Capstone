@@ -60,12 +60,7 @@ class MonteCarloTreeSearch(object):
 
     #saves the current state of the model.
     def save_model(self):
-        self.model.save('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
-        print("!!!Model saved!!!")
-
-    #saves the current state of the model.
-    def save_model(self):
-        self.model.save('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+        self.model.save(self.fpath)
         print("!!!Model saved!!!")
 
     # Explores the gamespace using MCTS where the number of games is specified by the parameter.
