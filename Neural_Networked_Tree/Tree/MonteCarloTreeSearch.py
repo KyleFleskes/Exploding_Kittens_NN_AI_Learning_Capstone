@@ -21,7 +21,7 @@ from tensorflow.keras.optimizers import Adam
 class MonteCarloTreeSearch(object):
 
     # Creates a tree with the passed node as the root.
-    def __init__(self, node):
+    def __init__(self, node, fpath):
         """
         MonteCarloTreeSearchNode
         Parameters
@@ -29,24 +29,23 @@ class MonteCarloTreeSearch(object):
         node : mctspy.tree.nodes.MonteCarloTreeSearchNode
         """
         self.root = node
-        # This is saved so wins and loses are tracked relative to the tree owner.
-        self.owner = self.root.state.game.currentPlayer
+        self.fpath = fpath
         
          # if a neural network does not exist then create one.
-        if os.path.isfile('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5') is False:
+        if os.path.isfile(fpath) is False:
             print("!!!Creating new model!!!")
             self.model = self.create_model()
         
         # load previously created model.
         else:
-            self.model = tf.keras.models.load_model('C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+            self.model = tf.keras.models.load_model(fpath)
             print("!!!!Loading model from file!!!!")
 
     # creates a new model with an input layer with 12 nodes, 2 hiddens layers each with size 11 and 10 respectively
     # and 1 output layers each with size 10.
     def create_model(self):
         model = Sequential([
-        Dense(units = 11, input_shape = (12,), activation = 'relu'), # creates first hidden layer(Second overall layer),
+        Dense(units = 11, input_shape = (15,), activation = 'relu'), # creates first hidden layer(Second overall layer),
                                                                     # with 16 nodes,
                                                                     # with an input layer of shape (1,).
         Dense(units = 10, activation = 'relu'),
@@ -80,7 +79,7 @@ class MonteCarloTreeSearch(object):
             # get the node that the MCTS wants to explore.
             v = self._tree_policy()
             # simulate the game until a win or a loss.
-            reward = v.rollout(self.owner)
+            reward = v.rollout(self.model)
             #print("Reward: ", reward)
             # update the tree with the simulated game result.
             #print("Backpropagating....")

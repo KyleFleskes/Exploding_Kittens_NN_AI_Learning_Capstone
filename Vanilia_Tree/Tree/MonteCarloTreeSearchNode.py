@@ -83,9 +83,6 @@ class MonteCarloTreeSearchNode(ABC):
         ]
         #print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
-
-    #def q_value(self, c_param=1.4):
-    #    return (self.q / self.n) + c_param * np.sqrt((2 * np.log(self.n) / self.n))
     
     # picks a random action from the list of legal available actions.
     def rollout_policy(self, possible_moves):
@@ -153,7 +150,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             action = self.rollout_policy(possible_moves)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
-        #print("Game result: ", current_rollout_state.game_result())
+        print("Game result: ", current_rollout_state.game_result(owner))
         return current_rollout_state.game_result(owner)
 
     # this method takes in if a simulated game result

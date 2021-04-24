@@ -84,8 +84,20 @@ class MonteCarloTreeSearchNode(ABC):
         #print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
     
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # Change rollout policy to pick what the NN thinks is the best 
+    # action based off of the observation space instead of just picking
+    # a random choice.
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # picks a random action from the list of legal available actions.
-    def rollout_policy(self, possible_moves):
+    def rollout_policy(self, possible_moves, model):
+        
+        # format ovsersavtion space of current node
+        state = np.array(self.state.get_obsersavtion_space())
+        state = state.reshape(-1,15)
+
+        predictions = model.predict(state)
+
         return possible_moves[np.random.randint(len(possible_moves))]
 
 # This class represents an individual node in the Monte Carlo Search Tree.
@@ -93,7 +105,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     def __init__(self, state, parent=None, action=None):
         super().__init__(state, parent)
-        self._number_of_visits = 0.
+        self._number_of_visits = 0
         self._results = defaultdict(int)
         self._untried_actions = None
         self.wins = 0
@@ -140,27 +152,35 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     # this takes in the current game state and simuates the game with
     # random action until a win or loss.
-    def rollout(self, owner):
+    def rollout(self, model):
         current_rollout_state = self.state
+        
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
             # get a list of legal actions based on the game state.
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
-            action = self.rollout_policy(possible_moves)
+            action = self.rollout_policy(possible_moves, model)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
+            current_player = current_rollout_state.game.currentPlayer
         #print("Game result: ", current_rollout_state.game_result())
-        return current_rollout_state.game_result(owner)
+
+        return current_rollout_state.game_result()
 
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
         #print("Game result: ", current_rollout_state.game_result())
         #print(self.state.get_obsersavtion_space())
-        self._number_of_visits += 1.
+        self._number_of_visits += 1
+        
+        if len(self._results) == 0:
+            self._results[0] = 0
+            self._results[1] = 0
         # keep track of if the nodes children resulted in a win or a loss.
-        self._results[result] += 1.
+        self._results[result] += 1
+        #print(self._results)
         # if not the root of the tree, go to current node's parent.
         if self.parent:
             self.parent.backpropagate(result)

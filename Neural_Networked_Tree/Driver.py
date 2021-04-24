@@ -9,7 +9,7 @@ from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 # Does a pretty print of the search tree.
 def pprint_tree(node, file=None, _prefix="", _last=True):
     print(_prefix, "`- " if _last else "|- ", "P:",node.state.game.currentPlayer, " ",
-          node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", node._results[0], " #'s loses: ", node._results[1], sep="", file=file)
+          node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", list(node._results)[node.state.game.currentPlayer], " #'s loses: ", list(node._results)[node.state.game.currentPlayer - 1], sep="", file=file)
     _prefix += "   " if _last else "|  "
     child_count = len(node.children)
     for i, child in enumerate(node.children):
@@ -21,8 +21,8 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
 
 board_state = gs()
 root = node(board_state)
-t = tree(root)
-action = t.best_action(10)
+t = tree(root, 'C:/Users/flesk/Desktop/qlearning/models/exploding_cat_model.h5')
+action = t.best_action(1)
 
 pprint_tree(root)
 print("Best next move: ", action)
