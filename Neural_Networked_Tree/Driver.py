@@ -53,12 +53,13 @@ data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement
     'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
 data.gen_data()
 '''
-
+'''
 board_state = gs()
 root = node(board_state)
 t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
 blockPrint()
-action = t.best_action(6)
+action = t.best_action(10)
 enablePrint()
 pprint_tree(root)
 print("Best next move: ", action)
+'''
