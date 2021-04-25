@@ -8,16 +8,15 @@ import csv
 
 class Generate:
 
-    def __init__(self, model_fpath, csv_fpath):
-        self.model_fpath = model_fpath
+    def __init__(self, csv_fpath):
         self.csv_fpath = csv_fpath
         self.tree = None
 
     def gen_data(self):
         
-        board_state = gs(make_data=True)
+        board_state = gs()
         root = node(board_state)
-        self.tree = tree(root, self.model_fpath)
+        self.tree = tree(root)
         
         self.blockPrint()
         self.tree.best_action(100)
@@ -27,13 +26,14 @@ class Generate:
         
         self.build_data(root, 10)
         
-    # Does a pretty print of the search tree.
-    def pprint_tree(self, n, file=None, _prefix="", _last=True):
-        print(_prefix, "`- " if _last else "|- ", "P:", n.state.game.currentPlayer, " ",
-            n.state.get_obsersavtion_space(), "#'s visited: ", n.n, " #'s wins: ", list(n._results.values())[n.state.game.currentPlayer], " #'s loses: ", list(n._results.values())[n.state.game.currentPlayer - 1], " Action: ", n.action,sep="", file=file)
+   # Does a pretty print of the search tree.
+    def pprint_tree(self, node, file=None, _prefix="", _last=True):
+        print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
+            node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ",\
+            list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ", list(node._results.values())[node.state.game.currentPlayer - 1], " Action: ", node.action, sep="", file=file)
         _prefix += "   " if _last else "|  "
-        child_count = len(n.children)
-        for i, child in enumerate(n.children):
+        child_count = len(node.children)
+        for i, child in enumerate(node.children):
             _last = i == (child_count - 1)
             self.pprint_tree(child, file, _prefix, _last)
 
@@ -55,9 +55,9 @@ class Generate:
         queue.append(node)
         with open(self.csv_fpath, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Attack", "Skip", "Favor",\
+            writer.writerow(["Exploding Kitten", "Attack", "Skip", "Favor",\
                 "Shuffle", "See-The-Future", "Draw-From-Bottom", "Defuse", "Taco", "Watermelon",\
-                "Potato", "Beard", "Rainbow", "Draw", "Last Card Played Index", "Cards in Deck",\
+                "Potato", "Beard", "Rainbow", "Last Card Played Index", "Cards in Deck",\
                 "Attack Winrate", "Skip Winrate", "Favor Winrate", "Shuffle Winrate",\
                 "See-The-Future Winrate", "Draw-From-Bottom Winrate", "Defuse Winrate",\
                 "Taco Winrate", "Watermelon Winrate", "Potato Winrate", "Beard Winrate",\

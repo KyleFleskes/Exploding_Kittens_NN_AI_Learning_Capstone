@@ -76,7 +76,7 @@ class Game ():
         # Deal each player their hand
         for i in range(len(self.player)):
             for j in range(7):
-                self.player[i].cards.append(self.drawingPile[j])
+                self.player[i].cards.append(self.drawingPile[0])
                 self.drawingPile.pop(0)
             self.player[i].cards.append(DefuseCard(self))
 

@@ -159,6 +159,11 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
         #print("Game result: ", current_rollout_state.game_result())
         #print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1.
+        
+        if len(self._results) == 0:
+            self._results[0] = 0
+            self._results[1] = 0
+            
         # keep track of if the nodes children resulted in a win or a loss.
         self._results[result] += 1.
         # if not the root of the tree, go to current node's parent.

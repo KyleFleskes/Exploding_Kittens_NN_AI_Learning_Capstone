@@ -5,9 +5,6 @@
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
-from Models.Training_Data.Generate import Generate as gen
-import sys
-import os
 
 
 # Disable
@@ -48,11 +45,11 @@ while not board_state.is_game_over():
     action = t.best_action(5)
     board_state = board_state.move(action)
 '''
-'''
+
 data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5',\
     'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
 data.gen_data()
-'''
+
 '''
 board_state = gs()
 root = node(board_state)
