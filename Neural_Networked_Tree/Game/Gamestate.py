@@ -197,7 +197,7 @@ class ExplodingKittensAbstractGameState(ABC):
                 if i.type == value:
                     hand[key] = hand[key] + 1
 
-        # placeholder (maybe????) 'None' means no previous card was played.
+        #-1 means no previous card was played.
         lastPlayed = [-1]
 
         # if there is a last played card.
