@@ -1,6 +1,6 @@
 import math
 import random
-
+from termcolor import colored, cprint
 
 # ----------------------------------------------------------------
 #                           MAIN.py
@@ -18,9 +18,16 @@ checkPlayer = None
 def player1Draw(game):
     game.player[game.currentPlayer].drawCard(0)
 
+
 # ----------------------------------------------------------------
 #                           GAME.py
 # ----------------------------------------------------------------
+
+def cpprint(game, str):
+    if game.currentPlayer == 0:
+        print(str)
+    else:
+        cprint(str, 'red')
 
 
 class Game ():
@@ -35,8 +42,8 @@ class Game ():
         self.knownCards1 = []
         self.moves = []
         self.player = []
-
     # a reduced deck to generate some sample data for training the NN.
+
     def start_reduced_Game(self):
         self.player.append(Player(self))
         self.player.append(Player(self))
@@ -218,7 +225,7 @@ class Game ():
                 index = random.randint(0, len(self.player[target].cards)-1)
                 card = self.player[target].cards.pop(index)
                 self.player[self.currentPlayer].cards.append(card)
-                #print(card.type + " was stolen!")
+                cpprint(self, card.type + " was stolen!")
         # else:
         #    print("THIS FUNCTION CAN ONLY HANDLE 2 PLAYERS")
 # ----------------------------------------------------------------
@@ -250,20 +257,21 @@ class Player(object):
 
     def playTurn(self, choice):
         expStat = self.game.explosionStatus
-        #print("isGameOver: ", self.game.isGameOver)
-        #print("expStat: ",self.game.explosionStatus)
-        print(self.game.player[self.game.currentPlayer].cards)
         if (self.game.explosionStatus is True) and not any(isinstance(i, DefuseCard) for i in self.game.player[self.game.currentPlayer].cards):
-            #print("you do not have a defuse card!!!!!!")
             self.game.isGameOver = True
             return False
 
-        # changed so draw cant be made by player if an explosion is happening.
         if choice == "draw":
+            if self.game.isGameOver is False:
+                if self.game.explosionStatus is True:
+                    if choice != 'defuse':
+                        cpprint(self.game, 'Player ' + str(self.game.currentPlayer) +
+                                ': cannot draw while an explosion is active!')
+                        return False
             self.drawCard(0)
             return True
         if choice not in self.cardDict.keys():
-            print("Invalid choice.")
+            cpprint(self.game, "Invalid choice.")
             return False
         currHand = self.cardDict.copy()
         choiceIndexes = []
@@ -271,35 +279,34 @@ class Player(object):
             currHand[card.type] += 1
             if card.type == choice:
                 choiceIndexes.append(i)
-        print("isGameOver: ", self.game.isGameOver)
-        print("expStat: ", self.game.explosionStatus)
+
         if self.game.isGameOver is False:
             if self.game.explosionStatus is True:
-
                 if choice != 'defuse':
-                    # print('Player ' + str(self.game.currentPlayer)+': ' + 'cannot play ' +
-                    #      choice + ' while an explosion is active!')
+                    cpprint(self.game, 'Player ' + str(self.game.currentPlayer)+': ' + 'cannot play ' +
+                            choice + ' while an explosion is active!')
                     return False
             else:
                 if choice == 'defuse':
-                    # print('Player ' + str(self.game.currentPlayer)+': ' + 'cannot play ' +
-                    #      choice + ' while an explosion is not active!')
+                    cpprint(self.game, 'Player ' + str(self.game.currentPlayer)+': ' + 'cannot play ' +
+                            choice + ' while an explosion is not active!')
                     return False
 
             if choice in ['taco', 'watermelon', 'potato', 'beard', 'rainbow']:
                 if currHand[choice] < 2:
-                    #print('there are not enough '+choice+'s in your hand')
+                    cpprint(self.game, 'there are not enough ' +
+                            choice+'s in your hand')
                     return False
 
-                # print('Player ' + str(self.game.currentPlayer) +
-                #      ': played ' + choice + ' pair')
+                cpprint(self.game, 'Player ' + str(self.game.currentPlayer) +
+                        ': played ' + choice + ' pair')
                 self.cards.pop(choiceIndexes.pop())
 
             if currHand[choice] < 1:
-                #print(choice + ' is not in your hand')
+                cpprint(self.game, choice + ' is not in your hand')
                 return False
-            # print('Player ' + str(self.game.currentPlayer) +
-            #      ': played ' + choice)
+            cpprint(self.game, 'Player ' + str(self.game.currentPlayer) +
+                    ': played ' + choice)
 
             self.game.playedCards.insert(0, self.cards[choiceIndexes[0]])
             self.moves.insert(0, self.cards[choiceIndexes[0]].type)
@@ -328,8 +335,16 @@ class Player(object):
 
     # note I(Kyle) commented out the prints in this function for testing purposes.
     def testMove(self, choice):
+        if (self.game.explosionStatus is True) and not any(isinstance(i, DefuseCard) for i in self.game.player[self.game.currentPlayer].cards):
+            return False
+
         if choice == "draw":
+            if self.game.isGameOver is False:
+                if self.game.explosionStatus is True:
+                    if choice != 'defuse':
+                        return False
             return True
+
         if choice not in self.cardDict.keys():
             #print("Invalid choice.")
             return False
@@ -393,12 +408,14 @@ class Player(object):
         # updateNotice()
 
     def drawCard(self, num):
-        #print('Player' + str(self.game.currentPlayer) + ': drawCard')
+        cpprint(self.game, 'Player' +
+                str(self.game.currentPlayer) + ': drawCard')
 
         if self.game.drawingPile[num].type == 'kitten':
-            print("EXPLODING KITTEN!!!!")
             self.game.drawingPile[num].render()
-            self.game.checkGameOver()
+            # self.game.checkGameOver()
+            if not any(isinstance(i, DefuseCard) for i in self.game.player[self.game.currentPlayer].cards):
+                self.game.isGameOver = True
         else:
             self.cards.append(self.game.drawingPile[num])
             self.game.drawingPile.pop(num)
@@ -415,7 +432,6 @@ class Player(object):
             self.game.knownCards0.pop(0)
         if len(self.game.knownCards1) > 0 and num == 0:
             self.game.knownCards1.pop(0)
-
         # updateDisplay()
         # updateNotice()
 
@@ -623,7 +639,7 @@ class ExplodingKittenCard (object):
     time = 0  # WARNING MAY BE INCORRECT
 
     def render(self):
-        #print('Exploding Started')
+        cpprint(self.game, 'Exploding Started')
         self.game.explosionStatus = True
         # playAudio(0)
         # showExplosive()
@@ -654,20 +670,14 @@ class DefuseCard (object):
         self.game = game
 
     def render(self):
-        #print('Defuse Cards Started')
+        cpprint(self.game, 'Defuse Cards Started')
 
         # clearInterval(countDown)
         self.game.explosionStatus = False
         # hideExplosive()
 
-        if self.game.drawingPile[0].type == 'kitten':
-            if self.game.currentPlayer == 0:
-                # showSelect()
-                pass
-        else:
-            self.game.shuffle()
-            self.game.checkTurns()
-        #print('Defuse Cards Ended')
+        self.game.checkTurns()
+        cpprint(self.game, 'Defuse Cards Ended')
 
 
 class SkipCard (object):
@@ -677,9 +687,10 @@ class SkipCard (object):
         self.game = game
 
     def render(self):
-        #print('Skip Cards Started')
+        cpprint(self.game, 'Skip Cards Started')
         self.game.checkTurns()
-        #print('Skip Cards Ended, current player is', self.game.currentPlayer)
+        cpprint(self.game, 'Skip Cards Ended, current player is ' +
+                str(self.game.currentPlayer))
 
 
 class AttackCard (object):
@@ -689,13 +700,14 @@ class AttackCard (object):
         self.game = game
 
     def render(self):
-        #print('Attack Cards Started')
+        cpprint(self.game, 'Attack Cards Started')
         self.game.switchPlayer()
         if self.game.noOfTurn == 0:
             self.game.noOfTurn += 1
         else:
             self.game.noOfTurn += 2
-        #print('Attack Cards Ended, current player is', self.game.currentPlayer)
+        cpprint(self.game, 'Attack Cards Ended, current player is ' +
+                str(self.game.currentPlayer))
 
 
 class SeeTheFutureCard (object):
@@ -705,7 +717,7 @@ class SeeTheFutureCard (object):
         self.game = game
 
     def render(self):
-        #print('SeeTheFuture Started')
+        cpprint(self.game, 'SeeTheFuture Started')
         if self.game.currentPlayer == 0:
             self.game.knownCards0 = self.game.drawingPile[:3]
         else:
@@ -719,11 +731,11 @@ class DrawFromBottomCard (object):
         self.game = game
 
     def render(self):
-        # print('draw', str(self))
-        #print('Draw From Bottom Started')
+        cpprint(self.game, 'draw ' + str(self))
+        cpprint(self.game, 'Draw From Bottom Started')
         self.game.player[self.game.currentPlayer].drawCard(
             len(self.game.drawingPile) - 1)
-        #print('Draw From Bottom  Ended')
+        cpprint(self.game, 'Draw From Bottom  Ended')
 
 
 class FavorCard (object):
@@ -733,9 +745,9 @@ class FavorCard (object):
         self.game = game
 
     def render(self):
-        #print('Favor Cards Started')
+        cpprint(self.game, 'Favor Cards Started')
         self.game.stealRandom()
-        #print('Ended Started')
+        cpprint(self.game, 'Ended Started')
 
 
 # Cosmetic cats

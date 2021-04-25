@@ -197,7 +197,6 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     # random action until a win or loss.
     def rollout(self, model):
         current_rollout_state = self.state
-
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
             # get a list of legal actions based on the game state.
