@@ -5,7 +5,8 @@
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
-
+import sys
+import os
 
 # Disable
 def blockPrint():
@@ -26,6 +27,7 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
 
+
 '''
 board_state = gs()
 root = node(board_state)
@@ -37,14 +39,17 @@ enablePrint()
 pprint_tree(root)
 print("Best next move: ", action)
 '''
-'''
+
 board_state = gs()
 while not board_state.is_game_over():
     root = node(board_state)
     t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
+    blockPrint()
     action = t.best_action(5)
+    enablePrint()
     board_state = board_state.move(action)
-'''
+
+print(board_state.game_result())
 
 '''
 board_state = gs()

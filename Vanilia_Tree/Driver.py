@@ -13,8 +13,11 @@ import os
 
 # Does a pretty print of the search tree.
 def pprint_tree(node, file=None, _prefix="", _last=True):
-    print(_prefix, "`- " if _last else "|- ", "P:",node.state.game.currentPlayer, " ",
-          node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", node._results[0], " #'s loses: ", node._results[1], " action: ", node.action, sep="", file=file)
+    print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
+        node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ",\
+        list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ",\
+        list(node._results.values())[node.state.game.currentPlayer - 1], " Action: ",\
+        node.action, sep="", file=file)
     _prefix += "   " if _last else "|  "
     child_count = len(node.children)
     for i, child in enumerate(node.children):
@@ -31,27 +34,28 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-
+'''
 board_state = gs()
 root = node(board_state)
 t = tree(root)
 blockPrint()
-action = t.best_action(10)
+action = t.best_action(50)
 enablePrint()
 
 pprint_tree(root)
 print("Best next move: ", action)
-
-
 '''
 board_state = gs()
-
 while not board_state.is_game_over():
     root = node(board_state)
     t = tree(root)
-    action = t.best_action(1)
+    blockPrint()
+    action = t.best_action(5)
+    enablePrint()
     board_state = board_state.move(action)
-'''
+
+print(board_state.game_result())
+
 '''
 data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Vanilia_Tree/Training_Data/data.csv')
 data.gen_data()

@@ -140,7 +140,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     # this takes in the current game state and simuates the game with
     # random action until a win or loss.
-    def rollout(self, owner):
+    def rollout(self):
         current_rollout_state = self.state
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
@@ -150,8 +150,8 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             action = self.rollout_policy(possible_moves)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
-        #print("Game result: ", current_rollout_state.game_result(owner))
-        return current_rollout_state.game_result(owner)
+        #print("Game result: ", current_rollout_state.game_result())
+        return current_rollout_state.game_result()
 
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
