@@ -22,7 +22,7 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
 board_state = gs()
 root = node(board_state)
 t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/models/exploding_cat_model.h5')
-action = t.best_action(2)
+action = t.best_action(1)
 
 pprint_tree(root)
 print("Best next move: ", action)

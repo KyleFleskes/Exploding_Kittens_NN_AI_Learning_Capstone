@@ -23,6 +23,23 @@ class MonteCarloTreeSearchNode(ABC):
         self.state = state
         self.parent = parent
         self.children = []
+
+        self.indexToChoice = {
+            0: 'kitten',  # likely should be removed
+            1: 'attack',
+            2: 'skip',
+            3: 'favor',
+            4: 'shuffle',
+            5: 'see-the-future',
+            6: 'draw-from-bottom',
+            7: 'defuse',
+            8: 'taco',
+            9: 'watermelon',
+            10: 'potato',
+            11: 'beard',
+            12: 'rainbow',
+            13: 'draw'
+        }
         
 
     # An abstract method that will give the list of untried actions.
@@ -90,21 +107,36 @@ class MonteCarloTreeSearchNode(ABC):
     # a random choice.
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # picks a random action from the list of legal available actions.
-    def rollout_policy(self, possible_moves, model):
+    def rollout_policy(self, obs_space, possible_moves, model):
         
         # format ovsersavtion space of current node
-        state = np.array(self.state.get_obsersavtion_space())
+        state = np.array(obs_space)
         state = state.reshape(-1,15)
 
-        # use NN to make predictions of win rates for avalible moves.
+        # use NN to make predictions of win rates for all moves moves.
         predictions = model.predict(state)
-
-        #print(predictions)
-
+        predictions = predictions[0] # turn predictions into 1d array.
+        
         # TO DO: Pick move that has the highest predicted win rate 
         
+        # we add + 1 the indexTochoice because there are 14 card types but we never want to play the
+        # 0th card type. This is ok because the NN outputs for 13 card types.
+        valid_move = False
+        best = np.argmax(predictions)
+        choice = self.indexToChoice[best + 1]
+        
+        # loop until choosen the best move that is valid.
+        while(not valid_move):
+            # check if 'best' choice is in list of possible moves.
+            if choice in possible_moves:
+                valid_move = True
+            # choice is not list of possible moves, then check next best.
+            else:
+                predictions[best] = 0
+                best = np.argmax(predictions)
+                choice = self.indexToChoice[best + 1]
 
-        return possible_moves[np.random.randint(len(possible_moves))]
+        return choice
 
 # This class represents an individual node in the Monte Carlo Search Tree.
 class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
@@ -166,7 +198,7 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
             # get a list of legal actions based on the game state.
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
-            action = self.rollout_policy(possible_moves, model)
+            action = self.rollout_policy(current_rollout_state.get_obsersavtion_space(), possible_moves, model)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
         #print("Game result: ", current_rollout_state.game_result())
