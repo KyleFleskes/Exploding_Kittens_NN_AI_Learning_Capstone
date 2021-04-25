@@ -76,13 +76,10 @@ class AbstractGameAction(ABC):
 # This class represents the game state of Exploding Kittens
 class ExplodingKittensAbstractGameState(ABC):
 
-    def __init__(self, previousGame=None, make_data=False):
+    def __init__(self, previousGame=None):
         if not previousGame:
             self.game = game()
-            if (make_data):
-                self.game.start_reduced_Game()
-            else:
-                self.game.startGame()
+            self.game.startGame()
             # self.game = game.Game() # note im having trouble with this.
         else:
             self.game = previousGame
@@ -114,21 +111,21 @@ class ExplodingKittensAbstractGameState(ABC):
         }
 
     # A method that determines which if any player has won or lost.
-    def game_result(self):
+    def game_result(self, owner):
         """
         this property should return:
-         0 if player #0 wins
-         1 if player #1 wins
+         1 if player #0 wins
+        -1 if player #1 wins
          None if result is unknown
         Returns
         -------
         int
         """
         if self.game.isGameOver:
-            if self.game.currentPlayer == 0:
-                return 1
+            if self.game.currentPlayer == owner:  # sim uses 0 for p1 and 1 for p2
+                return 1 # win for opponent player
             else:
-                return 0
+                return 0 # win for desired player
         else:
             return None
 
@@ -155,7 +152,7 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-
+        
         gameCopy = copy.deepcopy(self.game)
 
         if isinstance(action, str):
@@ -165,9 +162,9 @@ class ExplodingKittensAbstractGameState(ABC):
                 self.indexToChoice[action])
         else:
             print("Invalid argument in gamestate.move")
-        # print(self.game.moves)
-        # print(gameCopy.moves)
-
+        #print(self.game.moves)
+        #print(gameCopy.moves)
+        
         return ExplodingKittensAbstractGameState(gameCopy)
 
     # A method that returns the list of all legal actions of the current game state.
@@ -198,7 +195,7 @@ class ExplodingKittensAbstractGameState(ABC):
                     hand[key] = hand[key] + 1
 
         # placeholder (maybe????) 'None' means no previous card was played.
-        lastPlayed = [-1]
+        lastPlayed = [None]
 
         # if there is a last played card.
         if self.game.playedCards:
@@ -206,7 +203,7 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    # print(value)
+                    #print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]
