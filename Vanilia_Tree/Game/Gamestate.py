@@ -123,9 +123,9 @@ class ExplodingKittensAbstractGameState(ABC):
         """
         if self.game.isGameOver:
             if self.game.currentPlayer == owner:  # sim uses 0 for p1 and 1 for p2
-                return 1 # win for opponent player
+                return 1  # win for opponent player
             else:
-                return 0 # win for desired player
+                return 0  # win for desired player
         else:
             return None
 
@@ -141,7 +141,7 @@ class ExplodingKittensAbstractGameState(ABC):
         """
         return self.game.isGameOver  # note I changed this to checkGameOver from is_game_over.
 
-    # A method that takes in an action(an index) and returns the resultant gamestate.
+    # A method that takes in an action(index or string) and returns the resultant gamestate.
     def move(self, action):
         """
         consumes action and returns resulting TwoPlayersAbstractGameState
@@ -152,7 +152,7 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-        
+
         gameCopy = copy.deepcopy(self.game)
 
         if isinstance(action, str):
@@ -162,9 +162,9 @@ class ExplodingKittensAbstractGameState(ABC):
                 self.indexToChoice[action])
         else:
             print("Invalid argument in gamestate.move")
-        #print(self.game.moves)
-        #print(gameCopy.moves)
-        
+        # print(self.game.moves)
+        # print(gameCopy.moves)
+
         return ExplodingKittensAbstractGameState(gameCopy)
 
     # A method that returns the list of all legal actions of the current game state.
@@ -203,7 +203,7 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    #print(value)
+                    # print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]

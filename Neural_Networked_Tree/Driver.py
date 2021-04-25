@@ -5,17 +5,20 @@
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
-from Models.Training_Data.Generate import Generate as gen 
+from Models.Training_Data.Generate import Generate as gen
 
 # Does a pretty print of the search tree.
+
+
 def pprint_tree(node, file=None, _prefix="", _last=True):
-    print(_prefix, "`- " if _last else "|- ", "P:",node.state.game.currentPlayer, " ",
+    print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
           node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ", list(node._results.values())[node.state.game.currentPlayer - 1], sep="", file=file)
     _prefix += "   " if _last else "|  "
     child_count = len(node.children)
     for i, child in enumerate(node.children):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
+
 
 board_state = gs()
 root = node(board_state)
@@ -27,7 +30,6 @@ print("Best next move: ", action)
 
 '''
 board_state = gs()
-
 while not board_state.is_game_over():
     root = node(board_state)
     t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')

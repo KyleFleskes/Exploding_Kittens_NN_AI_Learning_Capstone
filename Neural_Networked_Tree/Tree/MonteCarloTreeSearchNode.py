@@ -40,9 +40,9 @@ class MonteCarloTreeSearchNode(ABC):
             12: 'rainbow',
             13: 'draw'
         }
-        
 
     # An abstract method that will give the list of untried actions.
+
     @property
     @abstractmethod
     def untried_actions(self):
@@ -98,25 +98,25 @@ class MonteCarloTreeSearchNode(ABC):
             (c.q / c.n) + c_param * np.sqrt((2 * np.log(self.n) / c.n))
             for c in self.children
         ]
-        #print(np.argmax(choices_weights))
+        # print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
-    
+
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # Change rollout policy to pick what the NN thinks is the best 
+    # Change rollout policy to pick what the NN thinks is the best
     # action based off of the observation space instead of just picking
     # a random choice.
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # picks a random action from the list of legal available actions.
     def rollout_policy(self, obs_space, possible_moves, model):
-        
+
         # format ovsersavtion space of current node
         state = np.array(obs_space)
-        state = state.reshape(-1,15)
+        state = state.reshape(-1, 15)
 
         # use NN to make predictions of win rates for all moves moves.
         predictions = model.predict(state)
-        predictions = predictions[0] # turn predictions into 1d array.
-        
+        predictions = predictions[0]  # turn predictions into 1d array.
+
         # we add + 1 the indexTochoice because there are 14 card types but we never want to play the
         # 0th card type. This is ok because the NN outputs for 13 card types.
         valid_move = False
@@ -126,7 +126,7 @@ class MonteCarloTreeSearchNode(ABC):
         print(possible_moves)
         # loop until choosen the best move that is valid.
         while(not valid_move):
-            
+
             print(choice)
             # check if 'best' choice is in list of possible moves.
             if choice in possible_moves:
@@ -140,6 +140,8 @@ class MonteCarloTreeSearchNode(ABC):
         return choice
 
 # This class represents an individual node in the Monte Carlo Search Tree.
+
+
 class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
 
     def __init__(self, state, parent=None, action=None):
@@ -161,10 +163,11 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     def q(self):
         # changed to use game.currentplayer
         if self.parent is not None:
-            
+
             self.wins = self._results[self.parent.state.game.currentPlayer]
-            self.loses = self._results[abs(self.parent.state.game.currentPlayer - 1)]
-            
+            self.loses = self._results[abs(
+                self.parent.state.game.currentPlayer - 1)]
+
             #wins = self._results[self.parent.state.next_to_move]
             #loses = self._results[-1 * self.parent.state.next_to_move]
         return self.wins - self.loses
@@ -181,7 +184,8 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
         # simulate the action
         next_state = self.state.move(action)
         # add the new games state to the tree as a child of the current node.
-        child_node = TwoPlayersGameMonteCarloTreeSearchNode(next_state, parent=self, action=action)
+        child_node = TwoPlayersGameMonteCarloTreeSearchNode(
+            next_state, parent=self, action=action)
         self.children.append(child_node)
         return child_node
 
@@ -193,13 +197,13 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     # random action until a win or loss.
     def rollout(self, model):
         current_rollout_state = self.state
-        
         # while current state is not a game ending state.
         while not current_rollout_state.is_game_over():
             # get a list of legal actions based on the game state.
             possible_moves = current_rollout_state.get_legal_actions()
             # pick a random move from available actions.
-            action = self.rollout_policy(current_rollout_state.get_obsersavtion_space(), possible_moves, model)
+            action = self.rollout_policy(
+                current_rollout_state.get_obsersavtion_space(), possible_moves, model)
             # take the action, and make the new game state the current one.
             current_rollout_state = current_rollout_state.move(action)
         #print("Game result: ", current_rollout_state.game_result())
@@ -209,15 +213,15 @@ class TwoPlayersGameMonteCarloTreeSearchNode(MonteCarloTreeSearchNode):
     # this method takes in if a simulated game result
     # and updates the whole tree accordingly.
     def backpropagate(self, result):
-        #print(self.state.get_obsersavtion_space())
+        # print(self.state.get_obsersavtion_space())
         self._number_of_visits += 1
-        
+
         if len(self._results) == 0:
             self._results[0] = 0
             self._results[1] = 0
         # keep track of if the nodes children resulted in a win or a loss.
         self._results[result] += 1
-        #print(self._results)
+        # print(self._results)
         # if not the root of the tree, go to current node's parent.
         if self.parent:
             self.parent.backpropagate(result)

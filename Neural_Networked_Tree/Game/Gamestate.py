@@ -155,7 +155,7 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-        
+
         gameCopy = copy.deepcopy(self.game)
 
         if isinstance(action, str):
@@ -165,9 +165,9 @@ class ExplodingKittensAbstractGameState(ABC):
                 self.indexToChoice[action])
         else:
             print("Invalid argument in gamestate.move")
-        #print(self.game.moves)
-        #print(gameCopy.moves)
-        
+        # print(self.game.moves)
+        # print(gameCopy.moves)
+
         return ExplodingKittensAbstractGameState(gameCopy)
 
     # A method that returns the list of all legal actions of the current game state.
@@ -206,7 +206,7 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    #print(value)
+                    # print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]
