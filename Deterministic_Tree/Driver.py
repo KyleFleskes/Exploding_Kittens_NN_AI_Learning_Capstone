@@ -8,14 +8,14 @@ import random
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
-# from TicTacToe import TicTacToeGameState
+#from TicTacToe import TicTacToeGameState
 
 # Does a pretty print of the search tree.
 
 
 def pprint_tree(node, file=None, _prefix="", _last=True):
-    print(_prefix, "`- " if _last else "|- ",
-          node.state.board, sep="", file=file)
+    print(_prefix, "`- " if _last else "|- ", "P:",node.state.game.currentPlayer, " ",
+          node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", node._results[0], " #'s loses: ", node._results[1], sep="", file=file)
     _prefix += "   " if _last else "|  "
     child_count = len(node.children)
     for i, child in enumerate(node.children):
@@ -34,7 +34,6 @@ def typeToIndex(indexToChoice, Type):
             index = key
 
     return index
-
 
 # This is some testing code to make sure that
 # get_obsersavtion_space(), get_legal_actions(), and move() works as intended in Gamestate.py
@@ -84,23 +83,31 @@ while (not board_state.is_game_over()):
 winner = board_state.game_result()
 print("Player: ", winner, " is the winner!")
 '''
-
-board_state = gs()  # create the initial game baord state.
-root = node(board_state)  # put that board state into a node.
-# print(root.untried_actions)
-# print(root.q)
-# print(root.n)
-while (not root.is_fully_expanded()):
-    # print(root.state.get_obsersavtion_space())
-    # print(root.untried_actions)
-    root.expand()
-
-
-# print(root.children)
 '''
 board_state = gs() # create the initial game baord state.
 root = node(board_state) # put that board state into a node.
-tree = tree(root) # put that node at the root of the tree.
+print(root.state.get_obsersavtion_space())
+print(root.untried_actions)
+#print(root.q)
+#print(root.n)
 
-tree.best_action(1)
+while (not root.is_fully_expanded()):
+    #print(root.state.get_obsersavtion_space())
+    #print(root.untried_actions)
+    root.expand()
+
+print(len(root.children))
+
+for x in range(len(root.children)):
+    print(root.children[x].state.get_obsersavtion_space())
+
+root.children[0].rollout()
 '''
+   
+board_state = gs()
+root = node(board_state)
+t = tree(root)
+action = t.best_action(50)
+
+pprint_tree(root)
+print("Best next move: ", action)

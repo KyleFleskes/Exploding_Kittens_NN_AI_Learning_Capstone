@@ -5,7 +5,7 @@
 from abc import ABC, abstractmethod
 try:
     from Exploding_Kittens import Game as game
-except:
+except ImportError:
     from .Exploding_Kittens import Game as game
 import copy
 
@@ -111,7 +111,7 @@ class ExplodingKittensAbstractGameState(ABC):
         }
 
     # A method that determines which if any player has won or lost.
-    def game_result(self):
+    def game_result(self, owner):
         """
         this property should return:
          1 if player #0 wins
@@ -122,10 +122,10 @@ class ExplodingKittensAbstractGameState(ABC):
         int
         """
         if self.game.isGameOver:
-            if self.game.currentPlayer == 0:  # sim uses 0 for p1 and 1 for p2
-                return 1
+            if self.game.currentPlayer == owner:  # sim uses 0 for p1 and 1 for p2
+                return 1  # win for opponent player
             else:
-                return -1
+                return 0  # win for desired player
         else:
             return None
 
@@ -141,7 +141,7 @@ class ExplodingKittensAbstractGameState(ABC):
         """
         return self.game.isGameOver  # note I changed this to checkGameOver from is_game_over.
 
-    # A method that takes in an action(an index) and returns the resultant gamestate.
+    # A method that takes in an action(index or string) and returns the resultant gamestate.
     def move(self, action):
         """
         consumes action and returns resulting TwoPlayersAbstractGameState
@@ -152,13 +152,18 @@ class ExplodingKittensAbstractGameState(ABC):
         -------
         TwoPlayersAbstractGameState
         """
-        print("is working?????")
+
         gameCopy = copy.deepcopy(self.game)
 
-        gameCopy.player[gameCopy.currentPlayer].playTurn(
-            self.indexToChoice[action])
-        print(self.game.moves)
-        print(gameCopy.moves)
+        if isinstance(action, str):
+            gameCopy.player[gameCopy.currentPlayer].playTurn(action)
+        elif isinstance(action, int):
+            gameCopy.player[gameCopy.currentPlayer].playTurn(
+                self.indexToChoice[action])
+        else:
+            print("Invalid argument in gamestate.move")
+        # print(self.game.moves)
+        # print(gameCopy.moves)
 
         return ExplodingKittensAbstractGameState(gameCopy)
 
@@ -198,15 +203,10 @@ class ExplodingKittensAbstractGameState(ABC):
             for key, value in self.indexToChoice.items():
                 # if found card type.
                 if self.game.playedCards[0].type == value:
-                    print(value)
+                    # print(value)
                     lastPlayed[0] = key
 
         cardsInDeck = [len(self.game.drawingPile)]
 
         obv_space = hand + lastPlayed + cardsInDeck
         return obv_space
-
-
-ng = game()
-
-print(ng)
