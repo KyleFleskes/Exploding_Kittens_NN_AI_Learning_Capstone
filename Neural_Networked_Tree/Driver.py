@@ -6,10 +6,19 @@ from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 from Models.Training_Data.Generate import Generate as gen
+import sys
+import os
+
+
+# Disable
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+
+# Restore
+def enablePrint():
+    sys.stdout = sys.__stdout__
 
 # Does a pretty print of the search tree.
-
-
 def pprint_tree(node, file=None, _prefix="", _last=True):
     print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
           node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ", list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ", list(node._results.values())[node.state.game.currentPlayer - 1], sep="", file=file)
@@ -19,15 +28,17 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
 
-
+'''
 board_state = gs()
 root = node(board_state)
 t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
+blockPrint()
 action = t.best_action(6)
+enablePrint()
 
 pprint_tree(root)
 print("Best next move: ", action)
-
+'''
 '''
 board_state = gs()
 while not board_state.is_game_over():
@@ -36,6 +47,7 @@ while not board_state.is_game_over():
     action = t.best_action(5)
     board_state = board_state.move(action)
 '''
-'''
-data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5', 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
-'''
+
+data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5',\
+    'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
+data.gen_data()

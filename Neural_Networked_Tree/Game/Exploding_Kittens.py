@@ -42,8 +42,8 @@ class Game ():
         self.knownCards1 = []
         self.moves = []
         self.player = []
-    # a reduced deck to generate some sample data for training the NN.
 
+    # a reduced deck to generate some sample data for training the NN.
     def start_reduced_Game(self):
         self.player.append(Player(self))
         self.player.append(Player(self))
@@ -56,11 +56,14 @@ class Game ():
         self.drawingPile.append(FavorCard(self))
 
         for i in range(2):
+            
             self.drawingPile.append(TacoCard(self))
             self.drawingPile.append(WatermelonCard(self))
             self.drawingPile.append(PotatoCard(self))
             self.drawingPile.append(BeardCard(self))
             self.drawingPile.append(RainbowCard(self))
+
+        
 
         # There are 5 of these cards rather than 4
         # self.drawingPile.append(SeeTheFutureCard(self))
@@ -76,7 +79,7 @@ class Game ():
         # Deal each player their hand
         for i in range(len(self.player)):
             for j in range(7):
-                self.player[i].cards.append(self.drawingPile[j])
+                self.player[i].cards.append(self.drawingPile[0])
                 self.drawingPile.pop(0)
             self.player[i].cards.append(DefuseCard(self))
 
@@ -120,7 +123,7 @@ class Game ():
         # Deal each player their hand
         for i in range(len(self.player)):
             for j in range(7):
-                self.player[i].cards.append(self.drawingPile[j])
+                self.player[i].cards.append(self.drawingPile[0])
                 self.drawingPile.pop(0)
             self.player[i].cards.append(DefuseCard(self))
 
