@@ -5,6 +5,7 @@
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
+from Models.Training_Data.Generate import Generate as gen 
 
 # Does a pretty print of the search tree.
 def pprint_tree(node, file=None, _prefix="", _last=True):
@@ -16,13 +17,10 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
 
-
-
-
 board_state = gs()
 root = node(board_state)
-t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/models/exploding_cat_model.h5')
-action = t.best_action(1)
+t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
+action = t.best_action(6)
 
 pprint_tree(root)
 print("Best next move: ", action)
@@ -32,7 +30,10 @@ board_state = gs()
 
 while not board_state.is_game_over():
     root = node(board_state)
-    t = tree(root)
-    action = t.best_action(50)
+    t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
+    action = t.best_action(5)
     board_state = board_state.move(action)
+'''
+'''
+data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5', 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
 '''

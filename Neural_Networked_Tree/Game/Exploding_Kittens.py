@@ -36,6 +36,51 @@ class Game ():
         self.moves = []
         self.player = []
 
+    # a reduced deck to generate some sample data for training the NN.
+    def start_reduced_Game(self):
+        self.player.append(Player(self))
+        self.player.append(Player(self))
+
+        self.drawingPile.append(ShuffleCard(self))
+        self.drawingPile.append(SkipCard(self))
+        # self.drawingPile.append(SeeTheFutureCard(self))
+        self.drawingPile.append(AttackCard(self))
+        # self.drawingPile.append(DrawFromBottomCard(self))
+        self.drawingPile.append(FavorCard(self))
+
+        for i in range(2):
+            self.drawingPile.append(TacoCard(self))
+            self.drawingPile.append(WatermelonCard(self))
+            self.drawingPile.append(PotatoCard(self))
+            self.drawingPile.append(BeardCard(self))
+            self.drawingPile.append(RainbowCard(self))
+
+        # There are 5 of these cards rather than 4
+        # self.drawingPile.append(SeeTheFutureCard(self))
+        # self.drawingPile.append(NopeCard(self))
+
+        # insert 2 defuse unless there are more than 4 players
+        for i in range(min(2, 6-len(self.player))):
+            self.drawingPile.append(DefuseCard(self))
+        self.shuffle()
+
+        self.shuffle()
+
+        # Deal each player their hand
+        for i in range(len(self.player)):
+            for j in range(7):
+                self.player[i].cards.append(self.drawingPile[j])
+                self.drawingPile.pop(0)
+            self.player[i].cards.append(DefuseCard(self))
+
+        # Insert the exploding kittens
+        for i in range(len(self.player) - 1):
+            self.drawingPile.append(ExplodingKittenCard(self))
+        self.shuffle()
+        # print(self)
+        # player1Timer()
+
+
     def startGame(self):  # not sure if simply removing the new keyword is ok
         self.player.append(Player(self))
         self.player.append(Player(self))
@@ -206,15 +251,20 @@ class Player(object):
 
     def playTurn(self, choice):
         expStat = self.game.explosionStatus
+        #print("isGameOver: ", self.game.isGameOver)
+        #print("expStat: ",self.game.explosionStatus)
+        print(self.game.player[self.game.currentPlayer].cards)
         if (self.game.explosionStatus is True) and not any(isinstance(i, DefuseCard) for i in self.game.player[self.game.currentPlayer].cards):
+            #print("you do not have a defuse card!!!!!!")
             self.game.isGameOver = True
             return False
 
+        # changed so draw cant be made by player if an explosion is happening.
         if choice == "draw":
             self.drawCard(0)
             return True
         if choice not in self.cardDict.keys():
-            #print("Invalid choice.")
+            print("Invalid choice.")
             return False
         currHand = self.cardDict.copy()
         choiceIndexes = []
@@ -222,9 +272,11 @@ class Player(object):
             currHand[card.type] += 1
             if card.type == choice:
                 choiceIndexes.append(i)
-
+        print("isGameOver: ", self.game.isGameOver)
+        print("expStat: ",self.game.explosionStatus)
         if self.game.isGameOver is False:
             if self.game.explosionStatus is True:
+                
                 if choice != 'defuse':
                     #print('Player ' + str(self.game.currentPlayer)+': ' + 'cannot play ' +
                     #      choice + ' while an explosion is active!')
@@ -345,6 +397,7 @@ class Player(object):
         #print('Player' + str(self.game.currentPlayer) + ': drawCard')
 
         if self.game.drawingPile[num].type == 'kitten':
+            print("EXPLODING KITTEN!!!!")
             self.game.drawingPile[num].render()
             self.game.checkGameOver()
         else:

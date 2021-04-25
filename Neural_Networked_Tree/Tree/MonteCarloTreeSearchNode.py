@@ -117,16 +117,17 @@ class MonteCarloTreeSearchNode(ABC):
         predictions = model.predict(state)
         predictions = predictions[0] # turn predictions into 1d array.
         
-        # TO DO: Pick move that has the highest predicted win rate 
-        
         # we add + 1 the indexTochoice because there are 14 card types but we never want to play the
         # 0th card type. This is ok because the NN outputs for 13 card types.
         valid_move = False
         best = np.argmax(predictions)
         choice = self.indexToChoice[best + 1]
-        
+        print(obs_space)
+        print(possible_moves)
         # loop until choosen the best move that is valid.
         while(not valid_move):
+            
+            print(choice)
             # check if 'best' choice is in list of possible moves.
             if choice in possible_moves:
                 valid_move = True
