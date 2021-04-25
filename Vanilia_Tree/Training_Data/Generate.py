@@ -19,23 +19,14 @@ class Generate:
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(100)
+        self.tree.best_action(1000)
         self.enablePrint()
 
-        self.pprint_tree(root)
+        pprint_tree(root)
         
-        self.build_data(root, 10)
+        self.build_data(root, 100)
         
-   # Does a pretty print of the search tree.
-    def pprint_tree(self, node, file=None, _prefix="", _last=True):
-        print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
-            node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ",\
-            list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ", list(node._results.values())[node.state.game.currentPlayer - 1], " Action: ", node.action, sep="", file=file)
-        _prefix += "   " if _last else "|  "
-        child_count = len(node.children)
-        for i, child in enumerate(node.children):
-            _last = i == (child_count - 1)
-            self.pprint_tree(child, file, _prefix, _last)
+
 
     # Disable
     def blockPrint(self):
@@ -101,4 +92,15 @@ class Generate:
                 writer.writerow(row)
                 counter = counter + 1
         
-       
+# Does a pretty print of the search tree.
+def pprint_tree( node, file=None, _prefix="", _last=True):
+    print(_prefix, "`- " if _last else "|- ", "P:", node.state.game.currentPlayer, " ",
+        node.state.get_obsersavtion_space(), "#'s visited: ", node.n, " #'s wins: ",\
+        list(node._results.values())[node.state.game.currentPlayer], " #'s loses: ",\
+        list(node._results.values())[node.state.game.currentPlayer - 1], " Action: ",\
+        node.action, sep="", file=file)
+    _prefix += "   " if _last else "|  "
+    child_count = len(node.children)
+    for i, child in enumerate(node.children):
+        _last = i == (child_count - 1)
+        pprint_tree(child, file, _prefix, _last)

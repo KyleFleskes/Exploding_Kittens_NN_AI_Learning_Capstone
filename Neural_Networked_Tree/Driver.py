@@ -46,10 +46,6 @@ while not board_state.is_game_over():
     board_state = board_state.move(action)
 '''
 
-data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5',\
-    'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Training_Data/data.csv')
-data.gen_data()
-
 '''
 board_state = gs()
 root = node(board_state)

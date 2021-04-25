@@ -8,6 +8,8 @@ from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
 from Training_Data.Generate import Generate as gen
+import sys
+import os
 
 # Does a pretty print of the search tree.
 def pprint_tree(node, file=None, _prefix="", _last=True):
@@ -20,16 +22,26 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         pprint_tree(child, file, _prefix, _last)
 
 
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
 
-'''
+# Restore
+
+
+def enablePrint():
+    sys.stdout = sys.__stdout__
+
+
 board_state = gs()
 root = node(board_state)
 t = tree(root)
-action = t.best_action(50)
+blockPrint()
+action = t.best_action(10)
+enablePrint()
 
 pprint_tree(root)
 print("Best next move: ", action)
-'''
+
 
 '''
 board_state = gs()
@@ -40,6 +52,7 @@ while not board_state.is_game_over():
     action = t.best_action(1)
     board_state = board_state.move(action)
 '''
-
+'''
 data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Vanilia_Tree/Training_Data/data.csv')
 data.gen_data()
+'''
