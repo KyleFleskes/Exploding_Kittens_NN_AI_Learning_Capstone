@@ -19,12 +19,12 @@ class Generate:
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(1000)
+        self.tree.best_action(100000)
         self.enablePrint()
 
         pprint_tree(root)
         
-        self.build_data(root, 100)
+        self.build_data(root, 10000)
         
 
 
@@ -59,7 +59,7 @@ class Generate:
             while queue:
 
                 # if generated specificed entries.
-                if counter is entries:
+                if counter >= entries:
                     return
                 
                 node = queue.pop(0)
@@ -90,6 +90,7 @@ class Generate:
                         queue.append(child)
                 row = row + winrates
                 writer.writerow(row)
+                
                 counter = counter + 1
         
 # Does a pretty print of the search tree.
