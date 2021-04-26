@@ -59,5 +59,5 @@ for i in range(20):
         enablePrint()
 '''
 
-data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Vanilia_Tree/Training_Data/small-deck-data.csv')
+data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Vanilia_Tree/Training_Data/data.csv')
 data.gen_data()

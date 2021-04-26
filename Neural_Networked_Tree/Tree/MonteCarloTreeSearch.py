@@ -55,7 +55,7 @@ class MonteCarloTreeSearch(object):
             Dense(units=13, activation='sigmoid')
         ])
         model.compile(optimizer=Adam(learning_rate=0.0001),
-                      loss='sparse_categorical_crossentropy',
+                      loss='mean_absolute_error',
                       metrics=['accuracy'])
 
         return model

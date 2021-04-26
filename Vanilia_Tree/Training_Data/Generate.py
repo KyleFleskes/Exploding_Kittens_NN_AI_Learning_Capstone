@@ -14,17 +14,17 @@ class Generate:
 
     def gen_data(self):
         
-        board_state = gs(make_data=True)
+        board_state = gs()
         root = node(board_state)
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(10000)
+        self.tree.best_action(100000)
         self.enablePrint()
 
         pprint_tree(root)
         
-        self.build_data(root, 1000)
+        self.build_data(root)
         
 
 
@@ -38,7 +38,7 @@ class Generate:
 
 
     # This uses the generated MCTS and extracts data for NN to train on.
-    def build_data(self, node, entries):
+    def build_data(self, node):
         visited = []   # List to keep track of visited nodes.
         queue = []     # Initialize a queue
         
@@ -57,10 +57,6 @@ class Generate:
             counter = 0
             #do a breadth first search of the MCTS.
             while queue:
-
-                # if generated specificed entries.
-                if counter >= entries:
-                    return
                 
                 node = queue.pop(0)
 
@@ -82,16 +78,22 @@ class Generate:
                             if wins + loses is not 0:
                                 winrates[key - 1] = wins / (wins + loses)
 
-                        
-
                 for child in node.children: 
                     if child not in visited:
                         visited.append(child)
                         queue.append(child)
+
                 row = row + winrates
-                writer.writerow(row)
                 
-                counter = counter + 1
+                count = 0
+
+                for win in winrates:
+                    if win > 0:
+                        count = count + 1
+
+                if count > 4:
+                    writer.writerow(row)
+                
         
 # Does a pretty print of the search tree.
 def pprint_tree( node, file=None, _prefix="", _last=True):
