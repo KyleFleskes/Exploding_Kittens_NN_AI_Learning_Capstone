@@ -5,6 +5,7 @@
 from Tree.MonteCarloTreeSearchNode import TwoPlayersGameMonteCarloTreeSearchNode as node
 from Tree.MonteCarloTreeSearch import MonteCarloTreeSearch as tree
 from Game.Gamestate import ExplodingKittensAbstractGameState as gs
+from Models.Training import training
 import sys
 import os
 
@@ -39,7 +40,7 @@ enablePrint()
 pprint_tree(root)
 print("Best next move: ", action)
 '''
-
+'''
 board_state = gs()
 while not board_state.is_game_over():
     root = node(board_state)
@@ -50,7 +51,7 @@ while not board_state.is_game_over():
     board_state = board_state.move(action)
 
 print(board_state.game_result())
-
+'''
 '''
 board_state = gs()
 root = node(board_state)
@@ -61,3 +62,7 @@ enablePrint()
 pprint_tree(root)
 print("Best next move: ", action)
 '''
+model_fpath = 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5'
+data_fpath = 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/data.csv'
+t = training(model_fpath)
+t.train(data_fpath)

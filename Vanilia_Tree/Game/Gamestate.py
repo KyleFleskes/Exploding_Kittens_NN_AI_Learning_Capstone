@@ -76,10 +76,13 @@ class AbstractGameAction(ABC):
 # This class represents the game state of Exploding Kittens
 class ExplodingKittensAbstractGameState(ABC):
 
-    def __init__(self, previousGame=None):
+    def __init__(self, previousGame=None, make_data=False):
         if not previousGame:
             self.game = game()
-            self.game.startGame()
+            if(not make_data):
+                self.game.startGame()
+            else:
+                self.game.start_reduced_Game()
             # self.game = game.Game() # note im having trouble with this.
         else:
             self.game = previousGame

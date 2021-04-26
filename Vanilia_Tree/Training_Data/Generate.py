@@ -14,17 +14,17 @@ class Generate:
 
     def gen_data(self):
         
-        board_state = gs()
+        board_state = gs(make_data=True)
         root = node(board_state)
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(100000)
+        self.tree.best_action(10000)
         self.enablePrint()
 
         pprint_tree(root)
         
-        self.build_data(root, 10000)
+        self.build_data(root, 1000)
         
 
 
