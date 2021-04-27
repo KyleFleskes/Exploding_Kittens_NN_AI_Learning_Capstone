@@ -47,15 +47,19 @@ class MonteCarloTreeSearch(object):
     def create_model(self):
         model = Sequential([
             # creates first hidden layer(Second overall layer),
-            Dense(units=14, input_shape=(15,), activation='relu'),
+            Dense(units=15, input_shape=(15,), activation='relu'),
             # with 15 nodes,
             # with an input layer of shape (1,).
-            Dense(units=14, activation='relu'),
+            Dense(units=15, activation='relu'),
+            Dropout(0.25),
+            Dense(units=15, activation='relu'),
             # create an output layer with 13 output nodes.
             Dense(units=13, activation='sigmoid')
         ])
+        #model.compile(optimizer=Adam(learning_rate=0.1),
+        #              loss='categorical_crossentropy', metrics=['accuracy'])
         model.compile(optimizer=Adam(learning_rate=0.0001),
-                      loss='mean_absolute_error',
+                      loss='mean_squared_error',
                       metrics=['accuracy'])
 
         return model

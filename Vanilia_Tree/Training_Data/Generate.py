@@ -19,7 +19,7 @@ class Generate:
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(100000)
+        self.tree.best_action(1000000)
         self.enablePrint()
 
         pprint_tree(root)
