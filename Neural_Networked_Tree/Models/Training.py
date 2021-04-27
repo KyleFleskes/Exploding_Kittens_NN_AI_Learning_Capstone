@@ -116,6 +116,6 @@ class training:
         print(input_columns[1])
         print(self.model.predict(input_columns[1].reshape(-1, 15)))
 
-        self.model.save('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
+        self.model.save('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
         
 
