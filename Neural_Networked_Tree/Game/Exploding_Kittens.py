@@ -639,7 +639,7 @@ class ExplodingKittenCard (object):
     time = 0  # WARNING MAY BE INCORRECT
 
     def render(self):
-        cpprint(self.game, 'Exploding Started')
+        cpprint(self.game, '*Gasp!* The Exploding Kitten!')
         self.game.explosionStatus = True
         # playAudio(0)
         # showExplosive()
@@ -670,14 +670,14 @@ class DefuseCard (object):
         self.game = game
 
     def render(self):
-        cpprint(self.game, 'Defuse Cards Started')
+        cpprint(self.game, 'The Exploding Kitten has successfully been defused!!!')
 
         # clearInterval(countDown)
         self.game.explosionStatus = False
         # hideExplosive()
 
         self.game.checkTurns()
-        cpprint(self.game, 'Defuse Cards Ended')
+        # cpprint(self.game, 'Defuse Cards Ended')
 
 
 class SkipCard (object):
@@ -687,9 +687,9 @@ class SkipCard (object):
         self.game = game
 
     def render(self):
-        cpprint(self.game, 'Skip Cards Started')
+        # cpprint(self.game, 'Skip Cards Started')
         self.game.checkTurns()
-        cpprint(self.game, 'Skip Cards Ended, current player is ' +
+        cpprint(self.game, 'Skip!!! current player is ' +
                 str(self.game.currentPlayer))
 
 
@@ -700,13 +700,13 @@ class AttackCard (object):
         self.game = game
 
     def render(self):
-        cpprint(self.game, 'Attack Cards Started')
+        # cpprint(self.game, 'Attack Cards Started')
         self.game.switchPlayer()
         if self.game.noOfTurn == 0:
             self.game.noOfTurn += 1
         else:
             self.game.noOfTurn += 2
-        cpprint(self.game, 'Attack Cards Ended, current player is ' +
+        cpprint(self.game, 'Attack!!! Current player is ' +
                 str(self.game.currentPlayer))
 
 
@@ -735,7 +735,7 @@ class DrawFromBottomCard (object):
         cpprint(self.game, 'Draw From Bottom Started')
         self.game.player[self.game.currentPlayer].drawCard(
             len(self.game.drawingPile) - 1)
-        cpprint(self.game, 'Draw From Bottom  Ended')
+        # cpprint(self.game, 'Draw From Bottom  Ended')
 
 
 class FavorCard (object):
@@ -745,9 +745,9 @@ class FavorCard (object):
         self.game = game
 
     def render(self):
-        cpprint(self.game, 'Favor Cards Started')
+        # cpprint(self.game, 'Favor Cards Started')
         self.game.stealRandom()
-        cpprint(self.game, 'Ended Started')
+        # cpprint(self.game, 'Ended Started')
 
 
 # Cosmetic cats

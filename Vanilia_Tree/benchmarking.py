@@ -33,9 +33,10 @@ def enablePrint():
 
 
 winsLosses = []
-p0_search = 14
+p0_search = 1
 p1_search = 1
 iterations = 100  # https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair
+opponent = 'random'
 for i in range(iterations):
     board_state = gs()
     print(i)
@@ -48,32 +49,45 @@ for i in range(iterations):
             t = tree(root)
             blockPrint()
             action = t.best_action(p0_search)
+            # enablePrint()
             board_state = board_state.move(action)
             enablePrint()
 
         while board_state.game.currentPlayer == 1:
             if board_state.is_game_over():
                 break
-            root = node(board_state)
-            t = tree(root)
-            blockPrint()
-            action = t.best_action(p1_search)
-            board_state = board_state.move(action)
-            enablePrint()
-    winsLosses.append(board_state.game_result(0))
+            if opponent == 'AI':
+                root = node(board_state)
+                t = tree(root)
+                blockPrint()
+                action = t.best_action(p1_search)
+                # enablePrint()
+                board_state = board_state.move(action)
+                enablePrint()
+            elif opponent == 'random':
+                blockPrint()
+                board_state = board_state.move(random.choice(
+                    board_state.get_legal_actions()))
+                enablePrint()
+            else:
+                print('please choose AI or random')
+
+    # print('winner', board_state.game_result())
+    winsLosses.append(board_state.game_result())
 
 # print(winsLosses)
 entry = {
     'p0_search': p0_search,
     'p1_search': p1_search,
     'iterations': iterations,
-    'wins': sum(winsLosses),
-    'loss': iterations - sum(winsLosses),
-    'ratio': sum(winsLosses)/(iterations - sum(winsLosses)),
+    'wins': iterations - sum(winsLosses),
+    'loss': sum(winsLosses),
+    'ratio': (iterations - sum(winsLosses))/sum(winsLosses),
     'raw': str(winsLosses),
 }
 
-fname = 'wins&losses.json'
+fname = 'wins&losses-'+str(iterations)+'-' + \
+    str(p0_search)+'-'+str(p1_search) + '-vs-' + opponent + '.json'
 a = []
 if not os.path.isfile(fname):
     a.append(entry)

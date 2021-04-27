@@ -39,7 +39,7 @@ class MonteCarloTreeSearch(object):
 
         # load previously created model.
         else:
-            self.model = tf.keras.models.load_model(fpath)
+            self.model = tf.keras.models.load_model(fpath, compile=False)
             print("!!!!Loading model from file!!!!")
 
     # creates a new model with an input layer with 12 nodes, 2 hiddens layers each with size 11 and 10 respectively
