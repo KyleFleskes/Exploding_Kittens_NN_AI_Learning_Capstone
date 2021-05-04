@@ -1,11 +1,9 @@
-import random
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene
 from asciimatics.effects import Cycle, Stars
 from asciimatics.renderers import FigletText
 from asciimatics.particles import ExplosionFlames, Explosion, StarExplosion
 from time import sleep
-import numpy as np
 import random
 import sys
 import os
@@ -64,7 +62,8 @@ def updateScreen():
         print("---------------------------------------------------------------------")
 
     else:
-        cprint("---------------------------------------------------------------------")
+        cprint(
+            "---------------------------------------------------------------------", "red")
         if board_state.game.currentPlayer:  # oppenent == 1, player == 0
             cprint("  It is your oppenent's turn", "red")
         else:
@@ -104,7 +103,7 @@ def printGameOver(screen):
         effects = [
             Cycle(
                 screen,
-                FigletText("EXPLODING  KITTEN!!!", font='big'),
+                FigletText("EXPLODING  KITTENS!!!", font='big'),
                 screen.height // 2 - 8),
             Cycle(
                 screen,
@@ -125,13 +124,15 @@ opponent = input(
     'Would you like to play against our vanilla AI or our neural network AI? [V, NN] ')
 move_count = int(input('How difficult would the AI to be? [0-100] ')) + 1
 print('Thank you for playing, enjoy your game!')
-sleep(2)
+print('')
+sleep(1)
 
 print("                                                                     ")
 print("                             Game is Starting                        ")
 print("                                                                     ")
+updateScreen()
 while not board_state.is_game_over():
-    updateScreen()
+
     # This is the gameloop for the player
     while board_state.game.currentPlayer == 0:
         choice = input("Select a card to play by name or draw:")
@@ -139,10 +140,13 @@ while not board_state.is_game_over():
             choice = input("Select a card to play by name or draw:")
         updateScreen()
 
-        if not board_state.is_game_over() and board_state.game.explosionStatus:
+        if board_state.is_game_over():
+            break
+        if board_state.game.explosionStatus:
             choice = input("Play your defuse card!!!")
             while(not board_state.game.player[board_state.game.currentPlayer].playTurn(choice)):
                 choice = input("PLAY YOUR DEFUSE CARD!!!")
+            updateScreen()
 
     # this is the gameloop for the ai
     while board_state.game.currentPlayer == 1:
@@ -160,9 +164,9 @@ while not board_state.is_game_over():
 
         elif opponent == 'NN':
             root = NNnode(board_state)
+            blockPrint()
             t = NNtree(
                 root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
-            blockPrint()
             action = t.best_action(move_count)
             enablePrint()
             board_state = board_state.move(action)
@@ -174,4 +178,5 @@ while not board_state.is_game_over():
                 board_state.get_legal_actions()))
             enablePrint()
 
+        updateScreen()
 Screen.wrapper(printGameOver)

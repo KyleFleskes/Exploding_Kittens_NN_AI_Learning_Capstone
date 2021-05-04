@@ -5,7 +5,7 @@ import sys
 import os
 import pickle
 import json
-
+import time
 
 from Neural_Networked_Tree.Game.Exploding_Kittens import Game as ek
 from Neural_Networked_Tree.Game.Gamestate import ExplodingKittensAbstractGameState as gs
@@ -29,15 +29,22 @@ def enablePrint():
 
 
 winsLosses = []
-p0_search = 28  # used by AI and NN
-p1_search = 28
-iterations = 10  # https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair
+p0Time = 0
+p1Time = 0
+
+p0_search = 18  # used by AI and NN
+p1_search = 18
+iterations = 100  # https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair
 player = 'NN'  # can use NN, AI, or random
 opponent = 'AI'
 for i in range(iterations):
     board_state = gs()
+    t0 = None
+    t1 = None
     print(i)
+
     while not board_state.is_game_over():
+        turnTimeStart = time.time()
 
         while board_state.game.currentPlayer == 0:
             if board_state.is_game_over():
@@ -45,19 +52,25 @@ for i in range(iterations):
 
             if player == 'AI':
                 root = Vnode(board_state)
-                t = Vtree(root)
+                if t0:
+                    t0.root = root
+                else:
+                    t0 = Vtree(root)
                 blockPrint()
-                action = t.best_action(p1_search)
+                action = t0.best_action(p1_search)
                 enablePrint()
                 board_state = board_state.move(action)
                 # enablePrint()
 
             elif player == 'NN':
                 root = NNnode(board_state)
-                t = NNtree(
-                    root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
+                if t0:
+                    t0.root = root
+                else:
+                    t0 = NNtree(
+                        root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
                 blockPrint()
-                action = t.best_action(p1_search)
+                action = t0.best_action(p1_search)
                 enablePrint()
                 board_state = board_state.move(action)
                 # enablePrint()
@@ -71,25 +84,33 @@ for i in range(iterations):
             else:
                 print('please choose AI or random')
 
+            p0Time += (time.time() - turnTimeStart)
+
         while board_state.game.currentPlayer == 1:
             if board_state.is_game_over():
                 break
 
             if opponent == 'AI':
                 root = Vnode(board_state)
-                t = Vtree(root)
+                if t1:
+                    t1.root = root
+                else:
+                    t1 = Vtree(root)
                 blockPrint()
-                action = t.best_action(p1_search)
+                action = t1.best_action(p1_search)
                 enablePrint()
                 board_state = board_state.move(action)
                 # enablePrint()
 
             elif opponent == 'NN':
                 root = NNnode(board_state)
-                t = NNtree(
-                    root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
+                if t1:
+                    t1.root = root
+                else:
+                    t1 = NNtree(
+                        root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
                 blockPrint()
-                action = t.best_action(p1_search)
+                action = t1.best_action(p1_search)
                 enablePrint()
                 board_state = board_state.move(action)
                 # enablePrint()
@@ -103,6 +124,8 @@ for i in range(iterations):
             else:
                 print('please choose AI or random')
 
+            p1Time += (time.time() - turnTimeStart)
+
     # print('winner', board_state.game_result())
     winsLosses.append(board_state.game_result())
 
@@ -111,6 +134,8 @@ entry = {
     'p0_search': p0_search,
     'p1_search': p1_search,
     'iterations': iterations,
+    'p0_time': p0Time,
+    'p1_time': p1Time,
     'wins': iterations - sum(winsLosses),
     'loss': sum(winsLosses),
     'ratio': ((iterations - sum(winsLosses))/sum(winsLosses) if sum(winsLosses) > 0 else 'NA'),

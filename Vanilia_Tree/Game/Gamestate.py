@@ -213,3 +213,4 @@ class ExplodingKittensAbstractGameState(ABC):
 
         obv_space = hand + lastPlayed + cardsInDeck
         return obv_space
+
