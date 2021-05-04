@@ -36,7 +36,7 @@ print("Best next move: ", action)
 ### How to Play Exploding Kittens RL. ###
 
  
-The game is mostly easily played through the Play.py script in the main directory. To use this srcipt:
+The game is most easily played through the Play.py script in the main directory. To use this srcipt:
 - Ensure any required packaged are installed and run the script.
 - Follow the prompts. There is currently no type-checking during set-up so be mindful of typo's
 - Difficulties above 20 start to become unpleasantly long.
