@@ -32,8 +32,8 @@ winsLosses = []
 p0Time = 0
 p1Time = 0
 
-p0_search = 18  # used by AI and NN
-p1_search = 18
+p0_search = 6  # used by AI and NN
+p1_search = 6
 iterations = 100  # https://en.wikipedia.org/wiki/Checking_whether_a_coin_is_fair
 player = 'NN'  # can use NN, AI, or random
 opponent = 'AI'
@@ -68,7 +68,7 @@ for i in range(iterations):
                     t0.root = root
                 else:
                     t0 = NNtree(
-                        root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-1000.h5')
+                        root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
                 blockPrint()
                 action = t0.best_action(p1_search)
                 enablePrint()
@@ -108,7 +108,7 @@ for i in range(iterations):
                     t1.root = root
                 else:
                     t1 = NNtree(
-                        root, 'C:/Users/digit/OneDrive/Documents/GitHub/Reinforcement_Learning_Capstone-2/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
+                         root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
                 blockPrint()
                 action = t1.best_action(p1_search)
                 enablePrint()

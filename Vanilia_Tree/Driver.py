@@ -24,17 +24,15 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
 
-
+# Block
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 
 # Restore
-
-
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-'''
+
 board_state = gs()
 root = node(board_state)
 t = tree(root)
@@ -44,20 +42,3 @@ enablePrint()
 
 pprint_tree(root)
 print("Best next move: ", action)
-'''
-'''
-results = []
-for i in range(20):
-    board_state = gs()
-    while not board_state.is_game_over():
-        root = node(board_state)
-        t = tree(root)
-        blockPrint()
-        action = t.best_action(5)
-        
-        board_state = board_state.move(action)
-        enablePrint()
-'''
-
-data = gen('C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Vanilia_Tree/Training_Data/data.csv')
-data.gen_data()

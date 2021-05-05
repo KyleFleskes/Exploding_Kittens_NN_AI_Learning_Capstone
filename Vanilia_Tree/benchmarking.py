@@ -1,10 +1,10 @@
 import Game.Exploding_Kittens as ek
 import random
-from asciimatics.screen import Screen
-from asciimatics.scene import Scene
-from asciimatics.effects import Cycle, Stars
-from asciimatics.renderers import FigletText
-from asciimatics.particles import ExplosionFlames, Explosion, StarExplosion
+#from asciimatics.screen import Screen
+#from asciimatics.scene import Scene
+#from asciimatics.effects import Cycle, Stars
+#from asciimatics.renderers import FigletText
+#from asciimatics.particles import ExplosionFlames, Explosion, StarExplosion
 from time import sleep
 import numpy as np
 import random

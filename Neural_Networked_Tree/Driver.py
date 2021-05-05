@@ -28,43 +28,8 @@ def pprint_tree(node, file=None, _prefix="", _last=True):
         _last = i == (child_count - 1)
         pprint_tree(child, file, _prefix, _last)
 
-
-'''
-board_state = gs()
-root = node(board_state)
-t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
-blockPrint()
-action = t.best_action(6)
-enablePrint()
-
-pprint_tree(root)
-print("Best next move: ", action)
-'''
-
-board_state = gs()
-while not board_state.is_game_over():
-    root = node(board_state)
-    blockPrint()
-    t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model-big.h5')
-    action = t.best_action(5)
-    enablePrint()
-    board_state = board_state.move(action)
-
-print(board_state.game_result())
-
-'''
-board_state = gs()
-root = node(board_state)
-t = tree(root, 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5')
-blockPrint()
-action = t.best_action(10)
-enablePrint()
-pprint_tree(root)
-print("Best next move: ", action)
-'''
-'''
 model_fpath = 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/Exploding_Cat_Model.h5'
 data_fpath = 'C:/Users/flesk/Desktop/qlearning/Git Exploding Kittens/Reinforcement_Learning_Capstone/Neural_Networked_Tree/Models/big-data.csv'
 t = training(model_fpath)
 t.train(data_fpath)
-'''
+

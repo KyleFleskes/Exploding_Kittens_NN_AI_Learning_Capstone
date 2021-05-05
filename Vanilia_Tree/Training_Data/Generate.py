@@ -19,7 +19,7 @@ class Generate:
         self.tree = tree(root)
         
         self.blockPrint()
-        self.tree.best_action(1000000)
+        self.tree.best_action(100)
         self.enablePrint()
 
         pprint_tree(root)
@@ -91,7 +91,7 @@ class Generate:
                     if win > 0:
                         count = count + 1
 
-                if count > 4:
+                if count > 2:
                     writer.writerow(row)
                 
         

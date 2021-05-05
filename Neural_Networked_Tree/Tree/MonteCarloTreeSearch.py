@@ -6,6 +6,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Activation, Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.models import load_model
+from keras.layers import Dropout
 import os.path
 import numpy as np
 import tensorflow as tf
@@ -42,6 +43,8 @@ class MonteCarloTreeSearch(object):
             self.model = tf.keras.models.load_model(fpath, compile=False)
             print("!!!!Loading model from file!!!!")
 
+        self.model.summary()
+
     # creates a new model with an input layer with 12 nodes, 2 hiddens layers each with size 11 and 10 respectively
     # and 1 output layers each with size 10.
     def create_model(self):
@@ -56,8 +59,6 @@ class MonteCarloTreeSearch(object):
             # create an output layer with 13 output nodes.
             Dense(units=13, activation='sigmoid')
         ])
-        #model.compile(optimizer=Adam(learning_rate=0.1),
-        #              loss='categorical_crossentropy', metrics=['accuracy'])
         model.compile(optimizer=Adam(learning_rate=0.0001),
                       loss='mean_squared_error',
                       metrics=['accuracy'])
