@@ -34,11 +34,10 @@ def enablePrint():
 
 
 board_state = gs()
-root = node(board_state)
-t = tree(root)
-blockPrint()
-action = t.best_action(50)
-enablePrint()
-
-pprint_tree(root)
-print("Best next move: ", action)
+print(board_state.get_obsersavtion_space())
+print(board_state.get_legal_actions())
+board_state = board_state.move("draw")
+print(board_state.get_obsersavtion_space())
+print(board_state.get_legal_actions())
+print(board_state.is_game_over())
+print(board_state.game_result())

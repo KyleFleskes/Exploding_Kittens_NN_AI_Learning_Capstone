@@ -18,9 +18,8 @@ class TwoPlayersAbstractGameState(ABC):
     def game_result(self):
         """
         this property should return:
-         1 if player #1 wins
-        -1 if player #2 wins
-         0 if there is a draw
+         0 if player #1 wins
+         1 if player #2 wins
          None if result is unknown
         Returns
         -------

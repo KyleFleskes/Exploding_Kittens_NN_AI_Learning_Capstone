@@ -1,0 +1,11 @@
+[
+  {
+    "p0_search": 5,
+    "p1_search": 5,
+    "iterations": 10,
+    "wins": 6,
+    "loss": 4,
+    "ratio": 1.5,
+    "raw": "[0, 0, 0, 1, 1, 1, 1, 0, 0, 0]"
+  }
+]

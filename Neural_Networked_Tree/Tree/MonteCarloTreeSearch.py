@@ -45,14 +45,15 @@ class MonteCarloTreeSearch(object):
 
         self.model.summary()
 
-    # creates a new model with an input layer with 12 nodes, 2 hiddens layers each with size 11 and 10 respectively
-    # and 1 output layers each with size 10.
+    # creates a new model with an input layer with 15 nodes, 3 hiddens layers each with size 15
+    # and 1 output layers each with size 13.
     def create_model(self):
         model = Sequential([
             # creates first hidden layer(Second overall layer),
-            Dense(units=15, input_shape=(15,), activation='relu'),
             # with 15 nodes,
-            # with an input layer of shape (1,).
+            # with an input layer of shape (15,).
+            Dense(units=15, input_shape=(15,), activation='relu'),
+            
             Dense(units=15, activation='relu'),
             Dropout(0.25),
             Dense(units=15, activation='relu'),

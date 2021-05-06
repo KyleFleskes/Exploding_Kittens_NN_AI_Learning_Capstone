@@ -101,12 +101,10 @@ class MonteCarloTreeSearchNode(ABC):
         # print(np.argmax(choices_weights))
         return self.children[np.argmax(choices_weights)]
 
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # Change rollout policy to pick what the NN thinks is the best
+
+    # picks what the NN thinks is the best
     # action based off of the observation space instead of just picking
     # a random choice.
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # picks a random action from the list of legal available actions.
     def rollout_policy(self, obs_space, possible_moves, model):
 
         # format ovsersavtion space of current node
@@ -116,17 +114,17 @@ class MonteCarloTreeSearchNode(ABC):
         # use NN to make predictions of win rates for all moves moves.
         predictions = model.predict(state)
         predictions = predictions[0]  # turn predictions into 1d array.
-
+        print(obs_space)
+        print(predictions)
+        print(possible_moves)
         # we add + 1 the indexTochoice because there are 14 card types but we never want to play the
         # 0th card type. This is ok because the NN outputs for 13 card types.
         valid_move = False
         best = np.argmax(predictions)
         choice = self.indexToChoice[best + 1]
-        print(obs_space)
-        print(possible_moves)
+
         # loop until choosen the best move that is valid.
         while(not valid_move):
-
             print(choice)
             # check if 'best' choice is in list of possible moves.
             if choice in possible_moves:
