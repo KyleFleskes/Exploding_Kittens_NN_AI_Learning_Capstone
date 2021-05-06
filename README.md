@@ -1,4 +1,4 @@
-## Reinforcement_Learning_Capstone : python implementation of Monte Carlo Tree Search algorithm for Exploding Kittens.
+## Exploding_Kittens_NN_AI_Capstone : python implementation of Monte Carlo Tree Search algorithm for Exploding Kittens.
 
  
 A python implementation of [Monte Carlo Tree Search](https://int8.io/monte-carlo-tree-search-beginners-guide) (MCTS) intended to run the card game Exploding Kittens. 
